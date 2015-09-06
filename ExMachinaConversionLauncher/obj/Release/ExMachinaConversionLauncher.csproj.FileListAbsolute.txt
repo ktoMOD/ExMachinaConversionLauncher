@@ -1,0 +1,17 @@
+D:\C#\ExMachinaConversionLauncher\ExMachinaConversionLauncher\bin\Release\ExMachinaConversionLauncher.exe.config
+D:\C#\ExMachinaConversionLauncher\ExMachinaConversionLauncher\bin\Release\ExMachinaConversionLauncher.exe
+D:\C#\ExMachinaConversionLauncher\ExMachinaConversionLauncher\bin\Release\ExMachinaConversionLauncher.pdb
+D:\C#\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\MainWindow.baml
+D:\C#\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\MainWindow.g.cs
+D:\C#\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\App.g.cs
+D:\C#\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\ExMachinaConversionLauncher_MarkupCompile.cache
+D:\C#\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\ExMachinaConversionLauncher.g.resources
+D:\C#\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\ExMachinaConversionLauncher.Properties.Resources.resources
+D:\C#\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\ExMachinaConversionLauncher.csproj.GenerateResource.Cache
+D:\C#\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\ExMachinaConversionLauncher.exe
+D:\C#\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\ExMachinaConversionLauncher.pdb
+D:\C#\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\Error.baml
+D:\C#\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\Error.g.cs
+D:\C#\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\Settings.baml
+D:\C#\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\Settings.g.cs
+D:\C#\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\ExMachinaConversionLauncher.csprojResolveAssemblyReference.cache
