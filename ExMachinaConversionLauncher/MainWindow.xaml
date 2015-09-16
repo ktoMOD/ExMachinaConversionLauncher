@@ -91,7 +91,7 @@
         <Button Foreground="#fffccc"  Content="               Запустить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Margin="555,212,0,0" Click="StartGame_Click" Template="{DynamicResource ButtonControlTemplate1}"/>
         <Button Foreground="#fffccc"  Content="                Выход" HorizontalAlignment="Left" VerticalAlignment="Top" Width="140" Margin="566,399,0,0" Click="CloseApp_Click" Template="{DynamicResource ButtonControlTemplate1}" Height="16"/>
         <Button Foreground="#fffccc"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="22" Margin="523,399,0,0" Click="Settings_Click" Template="{DynamicResource ButtonControlTemplate2}" Height="16"/>
-        <ListBox x:Name="ListOfMods" HorizontalAlignment="Left" Height="88" Margin="554,53,0,0" VerticalAlignment="Top" Width="149" Background="#FFCBCBC5" SelectionChanged="ListOfMods_SelectionChanged">
+        <ListBox x:Name="ListOfMods" HorizontalAlignment="Left" Height="94" Margin="551,50,0,0" VerticalAlignment="Top" Width="155" Background="#FFCBCBC5" SelectionChanged="ListOfMods_SelectionChanged">
             <ListBox.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>
@@ -120,12 +120,18 @@
             </TextBox.Template>
         </TextBox>
         <Image x:Name="Image" HorizontalAlignment="Left" Height="180" VerticalAlignment="Top" Width="440" Margin="96,59,0,0" />
-        <TextBlock Margin="97,402,609,25">           
+        <TextBlock Margin="97,411,609,16" TextDecorations="Underline">           
     <Hyperlink NavigateUri="http://deusexmachina.fsay.net/" RequestNavigate="Hyperlink_RequestNavigate">
         DeusExMachina
+        <Hyperlink.Style>
+            <Style TargetType="Hyperlink"
+                   BasedOn="{StaticResource {x:Type Hyperlink}}">
+                <Setter Property="Foreground" Value="#FF959592"/>
+            </Style>
+        </Hyperlink.Style>
     </Hyperlink>
         </TextBlock>
-        <ListBox x:Name="ListOfLaunchMode" HorizontalAlignment="Left" Height="37" Margin="554,156,0,0" VerticalAlignment="Top" Width="149" Background="#FFCBCBC5" SelectionChanged="ListOfMods_SelectionChanged">
+        <ListBox x:Name="ListOfLaunchMode" HorizontalAlignment="Left" Height="42" Margin="551,153,0,0" VerticalAlignment="Top" Width="155" Background="#FFCBCBC5" SelectionChanged="ListOfMods_SelectionChanged" RenderTransformOrigin="0.5,0.5">
             <ListBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="5"/>
@@ -136,10 +142,12 @@
                     <Style.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="5"/>
+                            <Setter Property="Height" Value="19" />
                         </Style>
                     </Style.Resources>
                 </Style>
             </ListBox.ItemContainerStyle>
         </ListBox>
+        <Label x:Name="LabelVersion" Content="Version: Conversion mod v0.81" HorizontalAlignment="Left" Margin="93,388,0,0" VerticalAlignment="Top" Foreground="#FF959592" Width="200" Height="25"/>
     </Grid>
 </Window>

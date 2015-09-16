@@ -10,6 +10,7 @@ namespace ExMachinaConversionLauncher.Models
 {
     public class ConfigReader
     {
+        internal string Version { get; set; }
         internal string Uri { get; set; }
         internal string[] Games { get; set; }
         internal string[] Descriptions { get; set; }
@@ -87,6 +88,9 @@ namespace ExMachinaConversionLauncher.Models
 
                 var lastLaunchGame = xmlDoc.Element("configuration").Element("lastLaunchGame").Value;
                 LastLaunchGame = lastLaunchGame;
+
+                var version = xmlDoc.Element("configuration").Element("conVersion").Value;
+                Version = version;
 
                 var lastLaunchMode = xmlDoc.Element("configuration").Element("lastLaunchMode").Value;
                 LastLaunchMode = lastLaunchMode;

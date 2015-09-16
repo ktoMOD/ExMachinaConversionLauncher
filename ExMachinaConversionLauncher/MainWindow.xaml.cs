@@ -44,6 +44,8 @@ namespace ExMachinaConversionLauncher
                 ListOfLaunchMode.ItemsSource = launchMods;
                 ListOfLaunchMode.SelectedItem = _configReader.LastLaunchMode;
 
+                LabelVersion.Content = "Version: " + _configReader.Version;
+
                 ModDescription.Text = _configReader.Descriptions[ListOfMods.SelectedIndex];
                 var logo = new BitmapImage(new Uri(Directory.GetCurrentDirectory() + @"\LauncherConfig" + _configReader.Pictures[ListOfMods.SelectedIndex]));
                 Image.Source = logo;

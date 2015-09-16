@@ -398,14 +398,17 @@ namespace ExMachinaConversionLauncher
                 }
                 switch ((string)SmoothingComboBox.SelectedItem)
                 {
-                    case "Низкое":
-                        _gameSettings.PostEffectBloom = 0;
+                    case "Отключено":
+                        _gameSettings.MultiSamplesNum = 0;
                         break;
-                    case "Среднее":
-                        _gameSettings.PostEffectBloom = 1;
+                    case "×2":
+                        _gameSettings.MultiSamplesNum = 2;
                         break;
-                    case "Высокое":
-                        _gameSettings.PostEffectBloom = 2;
+                    case "×4":
+                        _gameSettings.MultiSamplesNum = 4;
+                        break;
+                    case "×8":
+                        _gameSettings.MultiSamplesNum = 8;
                         break;
                 }
                 switch ((string)TexturesFilterComboBox.SelectedItem)
