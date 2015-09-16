@@ -97,6 +97,13 @@ namespace ExMachinaConversionLauncher
                         break;
                 }
 
+                var fullScreenList = new List<Dictionary<string, string>>();
+                for (var i = 0; i < _configReader.Games.Length; i++)
+                {
+                    fullScreenList.Add(new Dictionary<string, string>() {{"r_fullScreen", _configReader.FullScreen}});
+                }
+                writeConfig.WriteConfigBySelectionGame(ListOfMods.SelectedValue.ToString(), _configReader.Games, fullScreenList);
+
                 if (hdMode != "WithOutHD")
                 {
                     SaveParser saveParser = new SaveParser(_errorHandler);

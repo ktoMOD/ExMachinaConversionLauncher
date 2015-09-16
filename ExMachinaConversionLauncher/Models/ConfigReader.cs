@@ -11,6 +11,7 @@ namespace ExMachinaConversionLauncher.Models
     public class ConfigReader
     {
         internal string Version { get; set; }
+        internal string FullScreen { get; set; }
         internal string Uri { get; set; }
         internal string[] Games { get; set; }
         internal string[] Descriptions { get; set; }
@@ -91,6 +92,9 @@ namespace ExMachinaConversionLauncher.Models
 
                 var version = xmlDoc.Element("configuration").Element("conVersion").Value;
                 Version = version;
+
+                var fullScreen = xmlDoc.Element("configuration").Element("fullScreen").Value;
+                FullScreen = fullScreen;
 
                 var lastLaunchMode = xmlDoc.Element("configuration").Element("lastLaunchMode").Value;
                 LastLaunchMode = lastLaunchMode;
