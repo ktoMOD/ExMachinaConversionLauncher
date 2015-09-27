@@ -1,0 +1,5 @@
+9/16/2015 11:16:05 PM: Application was crashad at MainWindow function with exeption: 
+Provide value on 'System.Windows.Baml2006.TypeConverterMarkupExtension' threw an exception. System.FormatException: '2                00' string cannot be converted to Length.
+   at System.Windows.LengthConverter.FromString(String s, CultureInfo cultureInfo)
+   at System.Windows.LengthConverter.ConvertFrom(ITypeDescriptorContext typeDescriptorContext, CultureInfo cultureInfo, Object source)
+   at MS.Internal.Xaml.Runtime.ClrObjectRuntime.CallProvideValue(MarkupExtension me, IServiceProvider serviceProvider)
