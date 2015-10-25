@@ -20,7 +20,6 @@ D:\GitHub\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\Ex
 D:\GitHub\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\ExMachinaConversionLauncher.pdb
 D:\GitHub\ExMachinaConversionLauncher\ExMachinaConversionLauncher\bin\Release\ExMachinaConversionLauncher.exe
 D:\GitHub\ExMachinaConversionLauncher\ExMachinaConversionLauncher\bin\Release\ExMachinaConversionLauncher.pdb
-D:\GitHub\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\ExMachinaConversionLauncher.csprojResolveAssemblyReference.cache
 D:\GitHub\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\Error.baml
 D:\GitHub\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\MainWindow.baml
 D:\GitHub\ExMachinaConversionLauncher\ExMachinaConversionLauncher\obj\Release\Settings.baml
