@@ -40,7 +40,7 @@ namespace ExMachinaConversionLauncher
                     ListOfMods.Items.Add(game);
                 }
                 ListOfMods.SelectedItem = _configReader.LastLaunchGame;
-                string[] launchMods = { "One core CPU (Win 7)", "All core CPU (Win Xp)" };
+                string[] launchMods = { "Win 7/8/8.1/10", "Win Xp (and lower)" };
                 ListOfLaunchMode.ItemsSource = launchMods;
                 ListOfLaunchMode.SelectedItem = _configReader.LastLaunchMode;
 
