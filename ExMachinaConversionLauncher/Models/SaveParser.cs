@@ -21,7 +21,7 @@ namespace ExMachinaConversionLauncher.Models
                 var xmlFilesFromSaveFolder = Directory.GetFiles(Directory.GetCurrentDirectory() + path, "*.xml", SearchOption.AllDirectories);
                 foreach (var xmlFile in xmlFilesFromSaveFolder)
                 {
-                    var fileEncodingStrings = File.ReadLines(xmlFile);
+                    var fileEncodingStrings = File.ReadAllLines(xmlFile);
                     var encodingParametrName = "encoding=\"";
                     var encodingName = String.Empty;
                     foreach (var fileEncodingString in fileEncodingStrings)
