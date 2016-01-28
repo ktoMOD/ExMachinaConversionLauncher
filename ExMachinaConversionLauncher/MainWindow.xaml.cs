@@ -104,14 +104,6 @@ namespace ExMachinaConversionLauncher
                 }
                 writeConfig.WriteConfigBySelectionGame(ListOfMods.SelectedValue.ToString(), _configReader.Games, fullScreenList);
 
-                SaveParser saveParser = new SaveParser(_errorHandler);
-                var gameConfigPath = _configReader.ReadGameConfigPathToSaveFolder();
-                if (hdMode != "WithOutHD")
-                {
-                    saveParser.NormalizeInventoryForHdMode(gameConfigPath);
-                }
-                saveParser.NormalizeWandererGunSkin(gameConfigPath);
-
                 string parametr = string.Empty;
                 string console = string.Empty;
 

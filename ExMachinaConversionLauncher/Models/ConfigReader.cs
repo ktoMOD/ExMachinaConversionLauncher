@@ -166,25 +166,5 @@ namespace ExMachinaConversionLauncher.Models
                 return null;
             }
         }
-
-        internal string ReadGameConfigPathToSaveFolder()
-        {
-            try
-            {
-                var gameConfig = File.ReadAllText(Directory.GetCurrentDirectory() + @"\data\config.cfg");
-                var parametrName = "pathToProfiles=\"";
-
-                int begin, end;
-                begin = gameConfig.IndexOf(parametrName, StringComparison.InvariantCulture);
-                end = gameConfig.IndexOf("\"", begin + parametrName.Length, StringComparison.InvariantCulture);
-                var savePath = gameConfig.Substring(begin + parametrName.Length, end - begin - parametrName.Length);
-                return savePath;
-            }
-            catch (Exception ex)
-            {
-                _errorHandler.CallErrorWindows(ex, "ReadGameConfigPathToSaveFolder");
-                return null;
-            }
-        }
     }
 }

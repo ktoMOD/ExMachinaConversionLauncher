@@ -879,13 +879,5 @@ namespace ExMachinaConversionLauncher
                 _errorHandler.CallErrorWindows(ex, "SpeakVolumeTextBox_LostFocus");
             }
         }
-
-        private void DoNotLoadMainmenuLevelCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if (DoNotLoadMainmenuLevelCheckBox.IsChecked != null && DoNotLoadMainmenuLevelCheckBox.IsChecked == false)
-            {
-                MessageBox.Show("Может привести к нестабильности и вылетам. Выключайте на свой страх и риск.");
-            }
-        }
     }
 }
