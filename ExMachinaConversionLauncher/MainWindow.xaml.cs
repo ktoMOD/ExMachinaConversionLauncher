@@ -92,6 +92,9 @@ namespace ExMachinaConversionLauncher
                     case "WithHDWithSmallSight":
                         writeConfig.WriteConfigBySelectionGame(ListOfMods.SelectedValue.ToString(), _configReader.Games, _configReader.ListWithHdWithSmallSightConfigDictionary);
                         break;
+                    case "WithHDWithHardcoreSight":
+                        writeConfig.WriteConfigBySelectionGame(ListOfMods.SelectedValue.ToString(), _configReader.Games, _configReader.ListWithHdWithHardcoreSightConfigDictionary);
+                        break;
                     case "WithHDWithOvalSight":
                         writeConfig.WriteConfigBySelectionGame(ListOfMods.SelectedValue.ToString(), _configReader.Games, _configReader.ListWithHdWithOvalSightConfigDictionary);
                         break;

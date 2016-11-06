@@ -23,6 +23,7 @@ namespace ExMachinaConversionLauncher.Models
         internal List<Dictionary<string, string>> ListWithOutHdConfigDictionary { get; set; }
         internal List<Dictionary<string, string>> ListWithHdWithDefaultSightConfigDictionary { get; set; }
         internal List<Dictionary<string, string>> ListWithHdWithSmallSightConfigDictionary { get; set; }
+        internal List<Dictionary<string, string>> ListWithHdWithHardcoreSightConfigDictionary { get; set; }
         internal List<Dictionary<string, string>> ListWithHdWithOvalSightConfigDictionary { get; set; }
         internal bool Console { get; set; }
         internal string ExeName { get; set; }
@@ -42,6 +43,7 @@ namespace ExMachinaConversionLauncher.Models
                 ListWithOutHdConfigDictionary = new List<Dictionary<string, string>>();
                 ListWithHdWithDefaultSightConfigDictionary = new List<Dictionary<string, string>>();
                 ListWithHdWithSmallSightConfigDictionary = new List<Dictionary<string, string>>();
+                ListWithHdWithHardcoreSightConfigDictionary = new List<Dictionary<string, string>>();
                 ListWithHdWithOvalSightConfigDictionary = new List<Dictionary<string, string>>();
             }
             catch (Exception ex)
@@ -117,6 +119,7 @@ namespace ExMachinaConversionLauncher.Models
                     var withOutHdConfigDictionary = new Dictionary<string, string>();
                     var withHdWithDefaultSightConfigDictionary = new Dictionary<string, string>();
                     var withHdWithSmallSightConfigDictionary = new Dictionary<string, string>();
+                    var withHdWithHardcoreSightConfigDictionary = new Dictionary<string, string>();
                     var withHdWithOvalSightConfigDictionary = new Dictionary<string, string>();
 
                     var settingsUri = Directory.GetCurrentDirectory() + @"\LauncherConfig\" + configs[i];
@@ -126,6 +129,7 @@ namespace ExMachinaConversionLauncher.Models
                     var withOutHdConfigList = settingsXmlDoc.Element("configuration").Element("WithOutHD").Elements("Value").Select(x => x.Value).ToArray();
                     var withHdWithDefaultSightConfigList = settingsXmlDoc.Element("configuration").Element("WithHDWithDefaultSight").Elements("Value").Select(x => x.Value).ToArray();
                     var withHdWithSmallSightConfigList = settingsXmlDoc.Element("configuration").Element("WithHDWithSmallSight").Elements("Value").Select(x => x.Value).ToArray();
+                    var withHdWithHardcoreSightConfigList = settingsXmlDoc.Element("configuration").Element("WithHDWithHardcoreSight").Elements("Value").Select(x => x.Value).ToArray();
                     var withHdWithOvalSightConfigList = settingsXmlDoc.Element("configuration").Element("WithHDWithOvalSight").Elements("Value").Select(x => x.Value).ToArray();
 
                     for (int j = 0; j < BaseParametrsNames.Length; j++)
@@ -137,12 +141,14 @@ namespace ExMachinaConversionLauncher.Models
                         withOutHdConfigDictionary.Add(HdParametrsNames[j], withOutHdConfigList[j]);
                         withHdWithDefaultSightConfigDictionary.Add(HdParametrsNames[j], withHdWithDefaultSightConfigList[j]);
                         withHdWithSmallSightConfigDictionary.Add(HdParametrsNames[j], withHdWithSmallSightConfigList[j]);
+                        withHdWithHardcoreSightConfigDictionary.Add(HdParametrsNames[j], withHdWithHardcoreSightConfigList[j]);
                         withHdWithOvalSightConfigDictionary.Add(HdParametrsNames[j], withHdWithOvalSightConfigList[j]);
                     }
                     ListBaseConfigDictionary.Add(baseDictionary);
                     ListWithOutHdConfigDictionary.Add(withOutHdConfigDictionary);
                     ListWithHdWithDefaultSightConfigDictionary.Add(withHdWithDefaultSightConfigDictionary);
                     ListWithHdWithSmallSightConfigDictionary.Add(withHdWithSmallSightConfigDictionary);
+                    ListWithHdWithHardcoreSightConfigDictionary.Add(withHdWithHardcoreSightConfigDictionary);
                     ListWithHdWithOvalSightConfigDictionary.Add(withHdWithOvalSightConfigDictionary);
                 }
             }

@@ -101,7 +101,8 @@ namespace ExMachinaConversionLauncher
             {
                 "Стандартный",
                 "Маленький",
-                "Овальный"
+                "Овальный",
+                "Реалистичный",
             };
                 SightComboBox.ItemsSource = sightCollection;
                 string sightQualityInConfig;
@@ -112,6 +113,9 @@ namespace ExMachinaConversionLauncher
                         break;
                     case "WithHDWithOvalSight":
                         sightQualityInConfig = "Овальный";
+                        break;
+                    case "WithHDWithHardcoreSight":
+                        sightQualityInConfig = "Реалистичный";
                         break;
                     default:
                         sightQualityInConfig = "Стандартный";
@@ -448,6 +452,9 @@ namespace ExMachinaConversionLauncher
                             break;
                         case "Овальный":
                             sightQualityToConfig = "WithHDWithOvalSight";
+                            break;
+                        case "Реалистичный":
+                            sightQualityToConfig = "WithHDWithHardcoreSight";
                             break;
                         default:
                             sightQualityToConfig = "WithHDWithDefaultSight";
