@@ -1,7 +1,7 @@
 ﻿<Window x:Class="ExMachinaConversionLauncher.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ExMachina Conversion Launcher" Height="448" Width="790" ResizeMode="NoResize" Icon="InnerResourse/em.ico" AllowsTransparency="True" WindowStyle="None">
+        Title="ExMachina Conversion Launcher" Height="448" Width="790" ResizeMode="NoResize" Icon="em.ico" AllowsTransparency="True" WindowStyle="None">
     <Window.Resources>
         <ControlTemplate x:Key="ButtonControlTemplate1" TargetType="{x:Type Button}">
             <Grid>
@@ -121,7 +121,7 @@
         </TextBox>
         <Image x:Name="Image" HorizontalAlignment="Left" Height="180" VerticalAlignment="Top" Width="440" Margin="96,59,0,0" />
         <TextBlock Margin="97,411,609,16" TextDecorations="Underline">           
-    <Hyperlink NavigateUri="http://deusexmachina.fsay.net/" RequestNavigate="Hyperlink_RequestNavigate">
+    <Hyperlink NavigateUri="http://dem.org.ua/" RequestNavigate="Hyperlink_RequestNavigate">
         DeusExMachina
         <Hyperlink.Style>
             <Style TargetType="Hyperlink"

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="ExMachinaConversionLauncher.Settings"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Settings" Height="720" Width="550" ResizeMode="NoResize" Icon="InnerResourse/em.ico" AllowsTransparency="True" WindowStyle="None">
+        Title="Settings" Height="720" Width="550" ResizeMode="NoResize" Icon="em.ico" AllowsTransparency="True" WindowStyle="None">
 	<Window.Resources>
 		<ControlTemplate x:Key="ButtonControlTemplate1" TargetType="{x:Type Button}">
 			<Grid>
