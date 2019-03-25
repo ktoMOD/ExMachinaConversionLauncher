@@ -40,7 +40,7 @@ namespace ExMachinaConversionLauncher
                     ListOfMods.Items.Add(game);
                 }
                 ListOfMods.SelectedItem = _configReader.LastLaunchGame;
-                string[] launchMods = { "Win 7/8/8.1/10", "Win Xp (and lower)" };
+                string[] launchMods = { "Первое ядро CPU", "Второе ядро CPU", "Все ядра CPU" };
                 ListOfLaunchMode.ItemsSource = launchMods;
                 ListOfLaunchMode.SelectedItem = _configReader.LastLaunchMode;
 
@@ -111,6 +111,10 @@ namespace ExMachinaConversionLauncher
                 string console = string.Empty;
 
                 if (ListOfLaunchMode.SelectedIndex == 0)
+                {
+                    parametr = " /LOW /NODE 0 /AFFINITY 0x1";
+                }
+                else if(ListOfLaunchMode.SelectedIndex == 1)
                 {
                     parametr = " /AFFINITY 0x2";
                 }

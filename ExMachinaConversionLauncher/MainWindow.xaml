@@ -88,10 +88,10 @@
         <ImageBrush ImageSource="InnerResourse/Bg.png"/>
     </Window.Background>
     <Grid>
-        <Button Foreground="#fffccc"  Content="               Запустить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Margin="555,212,0,0" Click="StartGame_Click" Template="{DynamicResource ButtonControlTemplate1}"/>
+        <Button Foreground="#fffccc"  Content="              Запустить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="140" Margin="412.86,399,0,0" Click="StartGame_Click" Template="{DynamicResource ButtonControlTemplate1}" Height="16"/>
         <Button Foreground="#fffccc"  Content="                Выход" HorizontalAlignment="Left" VerticalAlignment="Top" Width="140" Margin="566,399,0,0" Click="CloseApp_Click" Template="{DynamicResource ButtonControlTemplate1}" Height="16"/>
-        <Button Foreground="#fffccc"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="22" Margin="523,399,0,0" Click="Settings_Click" Template="{DynamicResource ButtonControlTemplate2}" Height="16"/>
-        <ListBox x:Name="ListOfMods" HorizontalAlignment="Left" Height="94" Margin="551,50,0,0" VerticalAlignment="Top" Width="155" Background="#FFCBCBC5" SelectionChanged="ListOfMods_SelectionChanged">
+        <Button Foreground="#fffccc"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="22" Margin="369.86,399,0,0" Click="Settings_Click" Template="{DynamicResource ButtonControlTemplate2}" Height="16"/>
+        <ListBox x:Name="ListOfMods" HorizontalAlignment="Left" Height="115" Margin="551,50,0,0" VerticalAlignment="Top" Width="155" Background="#FFCBCBC5" SelectionChanged="ListOfMods_SelectionChanged">
             <ListBox.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>
@@ -131,7 +131,7 @@
         </Hyperlink.Style>
     </Hyperlink>
         </TextBlock>
-        <ListBox x:Name="ListOfLaunchMode" HorizontalAlignment="Left" Height="42" Margin="551,153,0,0" VerticalAlignment="Top" Width="155" Background="#FFCBCBC5" SelectionChanged="ListOfMods_SelectionChanged" RenderTransformOrigin="0.5,0.5">
+        <ListBox x:Name="ListOfLaunchMode" HorizontalAlignment="Left" Height="67" Margin="551,174.736,0,0" VerticalAlignment="Top" Width="155" Background="#FFCBCBC5" SelectionChanged="ListOfMods_SelectionChanged" RenderTransformOrigin="0.5,0.5">
             <ListBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="5"/>
