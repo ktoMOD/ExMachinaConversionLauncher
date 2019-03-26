@@ -15,7 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ExMachinaConversionLauncher.Models;
+using ExMachinaConversionLauncher.Services;
 
 namespace ExMachinaConversionLauncher
 {
@@ -74,9 +74,16 @@ namespace ExMachinaConversionLauncher
         {
             try
             {
-                WriteConfig writeConfig = new WriteConfig(_errorHandler);
-                writeConfig.UpdateLauncherConfig(new Dictionary<string, string>() { { "<lastLaunchGame>", (string)ListOfMods.SelectedItem }, { "<lastLaunchMode>", (string)ListOfLaunchMode.SelectedItem } });
+                PresentationSource source = PresentationSource.FromVisual(this);
+                double scaleX = 1;
+                if (source != null)
+                {
+                    scaleX = source.CompositionTarget.TransformToDevice.M11;
+                }
 
+                WriteConfig writeConfig = new WriteConfig(_errorHandler);
+                writeConfig.UpdateUiSchema2Hd(scaleX, _configReader.FontScaleParamsForHDCollection);
+                writeConfig.UpdateLauncherConfig(new Dictionary<string, string>() { { "<lastLaunchGame>", (string)ListOfMods.SelectedItem }, { "<lastLaunchMode>", (string)ListOfLaunchMode.SelectedItem } });
                 writeConfig.WriteConfigBySelectionGame(ListOfMods.SelectedValue.ToString(), _configReader.Games, _configReader.ListBaseConfigDictionary);
 
                 var hdMode = _configReader.ReadHdMode();

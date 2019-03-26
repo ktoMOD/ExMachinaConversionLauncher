@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 //using System.Threading.Tasks;
 
-namespace ExMachinaConversionLauncher.Models
+namespace ExMachinaConversionLauncher.Services
 {
     internal class WriteConfig
     {
@@ -15,7 +16,7 @@ namespace ExMachinaConversionLauncher.Models
         {
             _errorHandler = errorHandler;
         }
-        internal string WriteConfigBySelectionGame(string gameName, string[] games, List<Dictionary<string, string>> listParametrsDictionary)
+        internal void WriteConfigBySelectionGame(string gameName, string[] games, List<Dictionary<string, string>> listParametrsDictionary)
         {
             var index = Array.IndexOf(games, gameName);
             try
@@ -35,17 +36,15 @@ namespace ExMachinaConversionLauncher.Models
                     gameConfig = gameConfigStringBuilder.ToString();
                 }
                 File.WriteAllText(Directory.GetCurrentDirectory() + @"\data\config.cfg", gameConfig);
-                return null;
             }
             catch (Exception ex)
             {
                 _errorHandler.CallErrorWindows(ex, "WriteConfigBySelectionGame");
-                return null;
             }
 
         }
 
-        internal string UpdateLauncherConfig(Dictionary<string, string> data)
+        internal void UpdateLauncherConfig(Dictionary<string, string> data)
         {
             try
             {
@@ -61,12 +60,42 @@ namespace ExMachinaConversionLauncher.Models
                     launcherConfig = launcherConfigStringBuilder.ToString();
                 }
                 File.WriteAllText(Directory.GetCurrentDirectory() + @"\LauncherConfig\Launcher.config", launcherConfig);
-                return null;
             }
             catch (Exception ex)
             {
                 _errorHandler.CallErrorWindows(ex, "UpdateLauncherConfig");
-                return null;
+            }
+        }
+
+        internal void UpdateUiSchema2Hd(double scaleValue, List<string> paramsArray)
+        {
+            try
+            {
+                var myRegex = new Regex($@"^{scaleValue}\|");
+                var valueString = paramsArray.FirstOrDefault(myRegex.IsMatch);
+                if (string.IsNullOrEmpty(valueString))
+                {
+                    return;
+                }
+                var wndFontSize = 7;
+                var micAndTooltipFontSize = 8;
+
+                var uischema2_hd = File.ReadAllText(Directory.GetCurrentDirectory() + @"\data\if\frames\uischema2_hd.xml");
+                //foreach (var parametr in data)
+                //{
+                //    var startIndex = uischema2_hd.IndexOf(parametr.Key, StringComparison.InvariantCulture) + parametr.Key.Length;
+                //    var endIndex = uischema2_hd.IndexOf("</", startIndex, StringComparison.InvariantCulture);
+
+                //    var uischema2_hdStringBuilder = new StringBuilder(uischema2_hd);
+                //    uischema2_hdStringBuilder.Remove(startIndex, endIndex - startIndex);
+                //    uischema2_hdStringBuilder.Insert(startIndex, parametr.Value);
+                //    uischema2_hd = uischema2_hdStringBuilder.ToString();
+                //}
+                File.WriteAllText(Directory.GetCurrentDirectory() + @"\data\if\frames\uischema2_hd.xml", uischema2_hd);
+            }
+            catch (Exception ex)
+            {
+                _errorHandler.CallErrorWindows(ex, "UpdateUiSchema2Hd");
             }
         }
     }

@@ -58,8 +58,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Models\ErrorHandler.cs" />
-    <Compile Include="Models\GameSettingsService.cs" />
+    <Compile Include="Services\ErrorHandler.cs" />
+    <Compile Include="Services\GameSettingsService.cs" />
     <Compile Include="Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
@@ -88,8 +88,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\ConfigReader.cs" />
-    <Compile Include="Models\WriteConfig.cs" />
+    <Compile Include="Services\ConfigReader.cs" />
+    <Compile Include="Services\WriteConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

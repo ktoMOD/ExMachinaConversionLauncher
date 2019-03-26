@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 
-namespace ExMachinaConversionLauncher.Models
+namespace ExMachinaConversionLauncher.Services
 {
     class GameSettingsService
     {

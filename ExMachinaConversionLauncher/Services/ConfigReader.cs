@@ -6,7 +6,7 @@ using System.Text;
 //using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace ExMachinaConversionLauncher.Models
+namespace ExMachinaConversionLauncher.Services
 {
     public class ConfigReader
     {
@@ -30,6 +30,7 @@ namespace ExMachinaConversionLauncher.Models
         internal string LastLaunchGame { get; set; }
         internal string LastLaunchMode { get; set; }
         internal List<string> ResolutionsCollection { get; set; }
+        internal List<string> FontScaleParamsForHDCollection { get; set; }
         private readonly ErrorHandler _errorHandler;
 
 
@@ -82,6 +83,13 @@ namespace ExMachinaConversionLauncher.Models
                     resolutionsCollection[i] = resolutionsCollection[i].ToLower().Replace("x", "×").Replace("х", "×");
                 }
                 ResolutionsCollection = resolutionsCollection;
+
+                var fontScaleParamsForHDCollection = xmlDoc.Element("configuration").Element("FontScaleParamsForHD").Elements("Value").Select(x => x.Value).ToList();
+                for (int i = 0; i < fontScaleParamsForHDCollection.Count; i++)
+                {
+                    fontScaleParamsForHDCollection[i] = fontScaleParamsForHDCollection[i].ToLower();
+                }
+                FontScaleParamsForHDCollection = fontScaleParamsForHDCollection;
 
                 var console = xmlDoc.Element("configuration").Element("console").Value;
                 Console = Convert.ToBoolean(console);
