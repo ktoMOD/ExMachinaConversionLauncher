@@ -77,20 +77,14 @@ namespace ExMachinaConversionLauncher.Services
                 {
                     return;
                 }
-                var wndFontSize = 7;
-                var micAndTooltipFontSize = 8;
+                var valueStringArray = valueString.Split('|');
+                var wndFontSize = !string.IsNullOrEmpty(valueStringArray[1]) ? valueStringArray[1] : "7";
+                var micAndTooltipFontSize = !string.IsNullOrEmpty(valueStringArray[2]) ? valueStringArray[2] : "8";
 
                 var uischema2_hd = File.ReadAllText(Directory.GetCurrentDirectory() + @"\data\if\frames\uischema2_hd.xml");
-                //foreach (var parametr in data)
-                //{
-                //    var startIndex = uischema2_hd.IndexOf(parametr.Key, StringComparison.InvariantCulture) + parametr.Key.Length;
-                //    var endIndex = uischema2_hd.IndexOf("</", startIndex, StringComparison.InvariantCulture);
-
-                //    var uischema2_hdStringBuilder = new StringBuilder(uischema2_hd);
-                //    uischema2_hdStringBuilder.Remove(startIndex, endIndex - startIndex);
-                //    uischema2_hdStringBuilder.Insert(startIndex, parametr.Value);
-                //    uischema2_hd = uischema2_hdStringBuilder.ToString();
-                //}
+                uischema2_hd = Regex.Replace(uischema2_hd, "wndFontSize=\"(\\d*)\"", $"wndFontSize=\"{wndFontSize}\"");
+                uischema2_hd = Regex.Replace(uischema2_hd, "tooltipFontSize=\"(\\d*)\"", $"tooltipFontSize=\"{micAndTooltipFontSize}\"");
+                uischema2_hd = Regex.Replace(uischema2_hd, "miscFontSize=\"(\\d*)\"", $"miscFontSize=\"{micAndTooltipFontSize}\"");
                 File.WriteAllText(Directory.GetCurrentDirectory() + @"\data\if\frames\uischema2_hd.xml", uischema2_hd);
             }
             catch (Exception ex)
