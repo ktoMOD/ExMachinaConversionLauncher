@@ -1,10 +1,11 @@
-﻿using System;
+﻿using ExMachinaConversionLauncher.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-//using System.Threading.Tasks;
+using System.Xml;
 
 namespace ExMachinaConversionLauncher.Services
 {
@@ -27,7 +28,6 @@ namespace ExMachinaConversionLauncher.Services
                     int begin, end;
                     begin = gameConfig.IndexOf(configString.Key, StringComparison.InvariantCulture);
                     end = gameConfig.IndexOf("\"", begin + configString.Key.Length + 2, StringComparison.InvariantCulture);
-                    //var value = gameConfig.Substring(begin, end - begin + 1);
 
                     var gameConfigStringBuilder = new StringBuilder(gameConfig);
                     gameConfigStringBuilder.Remove(begin, end - begin + 1);
@@ -44,42 +44,31 @@ namespace ExMachinaConversionLauncher.Services
 
         }
 
-        internal void UpdateLauncherConfig(Dictionary<string, string> data)
+        internal void UpdateLauncherConfig(Dictionary<string, string> keyValuePairs)
         {
-            try
-            {
-                var launcherConfig = File.ReadAllText(Directory.GetCurrentDirectory() + @"\LauncherConfig\Launcher.config");
-                foreach (var parametr in data)
-                {
-                    var startIndex = launcherConfig.IndexOf(parametr.Key, StringComparison.InvariantCulture) + parametr.Key.Length;
-                    var endIndex = launcherConfig.IndexOf("</", startIndex, StringComparison.InvariantCulture);
+            XmlDocument doc = new XmlDocument();
+            doc.Load(Directory.GetCurrentDirectory() + @"\LauncherConfig\Launcher.config");
 
-                    var launcherConfigStringBuilder = new StringBuilder(launcherConfig);
-                    launcherConfigStringBuilder.Remove(startIndex, endIndex - startIndex);
-                    launcherConfigStringBuilder.Insert(startIndex, parametr.Value);
-                    launcherConfig = launcherConfigStringBuilder.ToString();
-                }
-                File.WriteAllText(Directory.GetCurrentDirectory() + @"\LauncherConfig\Launcher.config", launcherConfig);
-            }
-            catch (Exception ex)
+
+            foreach (var keyValuePair in keyValuePairs)
             {
-                _errorHandler.CallErrorWindows(ex, "UpdateLauncherConfig");
+                var nodes = doc.SelectNodes(String.Format("/Configuration/OtherParams/Value[@Name=\"{0}\"]", keyValuePair.Key));
+                foreach (XmlElement n in nodes)
+                {
+                    n.SetAttribute("Value", keyValuePair.Value);
+                }
             }
+
+            doc.Save(Directory.GetCurrentDirectory() + @"\LauncherConfig\Launcher.config");
         }
 
-        internal void UpdateUiSchema2Hd(double scaleValue, List<string> paramsArray)
+        internal void UpdateUiSchema2Hd(double scaleValue, List<FontScaleParamForHdModel> paramsArray)
         {
             try
             {
-                var myRegex = new Regex($@"^{scaleValue}\|");
-                var valueString = paramsArray.FirstOrDefault(myRegex.IsMatch);
-                if (string.IsNullOrEmpty(valueString))
-                {
-                    return;
-                }
-                var valueStringArray = valueString.Split('|');
-                var wndFontSize = !string.IsNullOrEmpty(valueStringArray[1]) ? valueStringArray[1] : "7";
-                var micAndTooltipFontSize = !string.IsNullOrEmpty(valueStringArray[2]) ? valueStringArray[2] : "8";
+                var fontScaleParamForHdModel = paramsArray.FirstOrDefault(x=>x.ScaleFactor == scaleValue);
+                var wndFontSize = fontScaleParamForHdModel != null ? fontScaleParamForHdModel.WndFontSize : 7;
+                var micAndTooltipFontSize = fontScaleParamForHdModel != null ? fontScaleParamForHdModel.MicAndTooltipFontSize : 8;
 
                 var uischema2_hd = File.ReadAllText(Directory.GetCurrentDirectory() + @"\data\if\frames\uischema2_hd.xml");
                 uischema2_hd = Regex.Replace(uischema2_hd, "wndFontSize=\"(\\d*)\"", $"wndFontSize=\"{wndFontSize}\"");

@@ -2,429 +2,439 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Settings" Height="720" Width="550" ResizeMode="NoResize" Icon="em.ico" AllowsTransparency="True" WindowStyle="None">
-	<Window.Resources>
-		<ControlTemplate x:Key="ButtonControlTemplate1" TargetType="{x:Type Button}">
-			<Grid>
-				<Rectangle x:Name="rectangle" RadiusY="5" RadiusX="5" RenderTransformOrigin="0.5,0.5" Margin="-7,-3,-3,-10">
-					<Rectangle.Fill>
-						<ImageBrush ImageSource="InnerResourse/Btns/mm_button_1.png"/>
-					</Rectangle.Fill>
-				</Rectangle>
-				<ContentPresenter RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="0,3,0,-3"/>
-			</Grid>
-			<ControlTemplate.Triggers>
-				<Trigger Property="IsDefault" Value="False"/>
-				<Trigger Property="IsDefault" Value="False"/>
-				<Trigger Property="IsDefault" Value="False"/>
-				<EventTrigger RoutedEvent="FrameworkElement.Loaded" SourceName="rectangle"/>
-				<Trigger Property="IsDefault" Value="False"/>
-				<Trigger Property="IsFocused" Value="True">
-					<Setter Property="Fill" TargetName="rectangle">
-						<Setter.Value>
-							<ImageBrush ImageSource="InnerResourse/Btns/mm_button_1b.png"/>
-						</Setter.Value>
-					</Setter>
-				</Trigger>
-				<Trigger Property="IsDefaulted" Value="True"/>
-				<Trigger Property="IsMouseOver" Value="True">
-					<Setter Property="Fill" TargetName="rectangle">
-						<Setter.Value>
-							<ImageBrush ImageSource="InnerResourse/Btns/mm_button_1b.png"/>
-						</Setter.Value>
-					</Setter>
-				</Trigger>
-				<Trigger Property="IsPressed" Value="True">
-					<Setter Property="Fill" TargetName="rectangle">
-						<Setter.Value>
-							<ImageBrush ImageSource="InnerResourse/Btns/mm_button_2.png"/>
-						</Setter.Value>
-					</Setter>
-				</Trigger>
-				<Trigger Property="IsEnabled" Value="False"/>
-			</ControlTemplate.Triggers>
-		</ControlTemplate>
-	</Window.Resources>
-	<Window.Background>
-		<ImageBrush ImageSource="InnerResourse/BgSettings.png"/>
-	</Window.Background>
-	<Grid Height="720" VerticalAlignment="Top">
-		<TextBox IsHitTestVisible="False"  HorizontalAlignment="Left" Padding="10,40,10,10" Margin="29,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="523" Width="197" Background="#FFCBCBC5" IsReadOnly="True">
-			<TextBox.Template>
-				<ControlTemplate>
-					<Border CornerRadius="5" Padding="2" BorderThickness="1" BorderBrush="#FF646464">
-						<Border.Background>
-							<ImageBrush ImageSource="InnerResourse/SettingsBackground.png"/>
-						</Border.Background>
-						<ScrollViewer Margin="0" x:Name="PART_ContentHost" />
-					</Border>
-				</ControlTemplate>
-			</TextBox.Template>
-		</TextBox>
-		<Button Content="            Сохранить" Foreground="#fffccc"   HorizontalAlignment="Left" VerticalAlignment="Top" Width="140" Margin="130,622,0,0" Click="Save_Click" Template="{DynamicResource ButtonControlTemplate1}" Height="16"/>
-		<Button Content="                Выход" Foreground="#fffccc" VerticalAlignment="Top" Width="140" Margin="285,622,0,0" Click="Cancel_Click" Template="{DynamicResource ButtonControlTemplate1}" Height="16" HorizontalAlignment="Left"/>
+    <Window.Resources>
+        <ControlTemplate x:Key="ButtonControlTemplate1" TargetType="{x:Type Button}">
+            <Grid>
+                <Rectangle x:Name="rectangle" RadiusY="5" RadiusX="5" RenderTransformOrigin="0.5,0.5" Margin="-7,-3,-3,-10">
+                    <Rectangle.Fill>
+                        <ImageBrush ImageSource="InnerResourse/Btns/mm_button_1.png"/>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <ContentPresenter RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="0,3,0,-3"/>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsDefault" Value="False"/>
+                <Trigger Property="IsDefault" Value="False"/>
+                <Trigger Property="IsDefault" Value="False"/>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded" SourceName="rectangle"/>
+                <Trigger Property="IsDefault" Value="False"/>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="Fill" TargetName="rectangle">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="InnerResourse/Btns/mm_button_1b.png"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsDefaulted" Value="True"/>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Fill" TargetName="rectangle">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="InnerResourse/Btns/mm_button_1b.png"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Fill" TargetName="rectangle">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="InnerResourse/Btns/mm_button_2.png"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False"/>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
+    <Window.Background>
+        <ImageBrush ImageSource="InnerResourse/BgSettings.png"/>
+    </Window.Background>
+    <Grid Height="720" VerticalAlignment="Top">
+        <TextBox IsHitTestVisible="False"  HorizontalAlignment="Left" Padding="10,40,10,10" Margin="29,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="525.286" Width="197" Background="#FFCBCBC5" IsReadOnly="True">
+            <TextBox.Template>
+                <ControlTemplate>
+                    <Border CornerRadius="5" Padding="2" BorderThickness="1" BorderBrush="#FF646464">
+                        <Border.Background>
+                            <ImageBrush ImageSource="InnerResourse/SettingsBackground.png"/>
+                        </Border.Background>
+                        <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
+                    </Border>
+                </ControlTemplate>
+            </TextBox.Template>
+        </TextBox>
+        <Button Content="            Сохранить" Foreground="#fffccc"   HorizontalAlignment="Left" VerticalAlignment="Top" Width="140" Margin="130,622,0,0" Click="Save_Click" Template="{DynamicResource ButtonControlTemplate1}" Height="16"/>
+        <Button Content="                Выход" Foreground="#fffccc" VerticalAlignment="Top" Width="140" Margin="285,622,0,0" Click="Cancel_Click" Template="{DynamicResource ButtonControlTemplate1}" Height="16" HorizontalAlignment="Left"/>
 
-		<Label Content="Разрешение" HorizontalAlignment="Left" Margin="30,74,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<Label Content="Дальность обзора" HorizontalAlignment="Left" Margin="30,99,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<Label Content="Дальность видимости фар NPC" HorizontalAlignment="Left" Margin="30,124,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<Label Content="Дальность видимости травы" HorizontalAlignment="Left" Margin="30,149,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<Label Content="Качество воды" HorizontalAlignment="Left" Margin="30,174,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<Label Content="Качество теней" HorizontalAlignment="Left" Margin="30,199,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<Label Content="Размытие теней" HorizontalAlignment="Left" Margin="30,224,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<Label Content="Качество блума" HorizontalAlignment="Left" Margin="30,249,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<Label Content="Сглаживание" HorizontalAlignment="Left" Margin="30,274,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<Label Content="Фильтрация" HorizontalAlignment="Left" Margin="30,299,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<Label Content="Гамма" HorizontalAlignment="Left" Margin="30,324,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<Label Content="Видео при загрузке" HorizontalAlignment="Left" Margin="30,349,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<Label Content="Загружать локацию меню" HorizontalAlignment="Left" Margin="30,374,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<Label Content="Угол зрения игрока - ''FOV''" HorizontalAlignment="Left" Margin="30,399,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<Label Content="Свободная камера" HorizontalAlignment="Left" Margin="30,424,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<Label Content="Скорость свободной камеры" HorizontalAlignment="Left" Margin="30,449,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<Label Content="Громкость музыки" HorizontalAlignment="Left" Margin="30,474,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<Label Content="Громкость эффектов" HorizontalAlignment="Left" Margin="30,499,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<Label Content="Громкость речи" HorizontalAlignment="Left" Margin="30,524,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Разрешение" HorizontalAlignment="Left" Margin="30,67,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Дальность обзора" HorizontalAlignment="Left" Margin="30,92,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Дальность видимости фар NPC" HorizontalAlignment="Left" Margin="30,117,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Дальность видимости травы" HorizontalAlignment="Left" Margin="30,142,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Качество воды" HorizontalAlignment="Left" Margin="30,167,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Качество теней" HorizontalAlignment="Left" Margin="30,192,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Размытие теней" HorizontalAlignment="Left" Margin="30,217,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Качество блума" HorizontalAlignment="Left" Margin="30,242,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Сглаживание" HorizontalAlignment="Left" Margin="30,267,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Фильтрация" HorizontalAlignment="Left" Margin="30,292,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Гамма" HorizontalAlignment="Left" Margin="30,317,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Видео при загрузке" HorizontalAlignment="Left" Margin="30,342,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Загружать локацию меню" HorizontalAlignment="Left" Margin="30,367,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Угол зрения игрока - ''FOV''" HorizontalAlignment="Left" Margin="30,392,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Свободная камера" HorizontalAlignment="Left" Margin="30,417,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Скорость свободной камеры" HorizontalAlignment="Left" Margin="30,442,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Громкость музыки" HorizontalAlignment="Left" Margin="30,467,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Громкость эффектов" HorizontalAlignment="Left" Margin="30,492,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <Label Content="Громкость речи" HorizontalAlignment="Left" Margin="30,517,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
 
-		<ComboBox x:Name="ResolutionComboBox" HorizontalAlignment="Left" Margin="242,78,0,0" VerticalAlignment="Top" Width="213" SelectionChanged="ResolutionComboBox_SelectionChanged">
-			<ComboBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Выберите ваше разрешение экрана." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</ComboBox.ToolTip>
-		</ComboBox>
-		<Label Content="HD mode" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="472,77,0,0" Background="Transparent" FontWeight="Bold" FontSize="10">
-			<Label.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="HD режим доступен только для разрешений с соотношениями сторон 16:9 или 16:10." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</Label.ToolTip>
-		</Label>
-		<CheckBox x:Name="HdCheckBox" HorizontalAlignment="Left" Margin="460,83,0,0" VerticalAlignment="Top" Checked="HdCheckBoxCheck" Unchecked="HdCheckBoxUnchecked">
-			<CheckBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Включить HD режим." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</CheckBox.ToolTip>
-		</CheckBox>
+        <ComboBox x:Name="ResolutionComboBox" HorizontalAlignment="Left" Margin="242,71,0,0" VerticalAlignment="Top" Width="213" SelectionChanged="ResolutionComboBox_SelectionChanged">
+            <ComboBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Выберите ваше разрешение экрана." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </ComboBox.ToolTip>
+        </ComboBox>
+        <Label Content="HD mode" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="472,70,0,0" Background="Transparent" FontWeight="Bold" FontSize="10">
+            <Label.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="HD режим доступен только для разрешений с соотношениями сторон 16:9 или 16:10." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </Label.ToolTip>
+        </Label>
+        <CheckBox x:Name="HdCheckBox" HorizontalAlignment="Left" Margin="460,76,0,0" VerticalAlignment="Top" Checked="HdCheckBoxCheck" Unchecked="HdCheckBoxUnchecked">
+            <CheckBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Включить HD режим." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </CheckBox.ToolTip>
+        </CheckBox>
 
-		<Slider x:Name="ViewDistanceSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,102,0,0" Maximum="1" ValueChanged="ViewDistanceSlider_ValueChanged" >
-			<Slider.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Дальность обзора. Значение относительно - от меньшего к большему." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</Slider.ToolTip>
-		</Slider>
-		<TextBox LostFocus="ViewDistanceTextBox_LostFocus" x:Name="ViewDistanceTextBox"  HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,102,0,0">
-			<TextBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Дальность обзора. Значение относительно - от меньшего к большему." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</TextBox.ToolTip>
-		</TextBox>
+        <Slider x:Name="ViewDistanceSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,95,0,0" Maximum="1" ValueChanged="ViewDistanceSlider_ValueChanged" >
+            <Slider.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Дальность обзора. Значение относительно - от меньшего к большему." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </Slider.ToolTip>
+        </Slider>
+        <TextBox LostFocus="ViewDistanceTextBox_LostFocus" x:Name="ViewDistanceTextBox"  HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,95,0,0">
+            <TextBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Дальность обзора. Значение относительно - от меньшего к большему." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </TextBox.ToolTip>
+        </TextBox>
 
-		<Slider x:Name="ProjectorsFarDistSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,126,0,0" IsSnapToTickEnabled="True" Maximum="5" ValueChanged="ProjectorsFarDistSlider_ValueChanged">
-			<Slider.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="На каком расстоянии вы увидите фары NPC ночью. Значение относительно - от меньшего к большему. По умолчанию - 3." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</Slider.ToolTip>
-		</Slider>
-		<TextBox LostFocus="ProjectorsFarDistTextBox_LostFocus" x:Name="ProjectorsFarDistTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,126,0,0">
-			<TextBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="На каком расстоянии вы увидите фары NPC ночью. Значение относительно - от меньшего к большему. По умолчанию - 3." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</TextBox.ToolTip>
-		</TextBox>
+        <Slider x:Name="ProjectorsFarDistSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,119,0,0" IsSnapToTickEnabled="True" Maximum="5" ValueChanged="ProjectorsFarDistSlider_ValueChanged">
+            <Slider.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="На каком расстоянии вы увидите фары NPC ночью. Значение относительно - от меньшего к большему. По умолчанию - 3." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </Slider.ToolTip>
+        </Slider>
+        <TextBox LostFocus="ProjectorsFarDistTextBox_LostFocus" x:Name="ProjectorsFarDistTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,119,0,0">
+            <TextBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="На каком расстоянии вы увидите фары NPC ночью. Значение относительно - от меньшего к большему. По умолчанию - 3." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </TextBox.ToolTip>
+        </TextBox>
 
-		<Slider x:Name="GrassDrawDistSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,151,0,0" Maximum="350" ValueChanged="GrassDrawDistSlider_ValueChanged">
-			<Slider.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Дальность прорисовки травы. Значение в метрах. Возможно выставить до 350 метров (через настройки в игре только до 200)." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</Slider.ToolTip>
-		</Slider>
-		<TextBox LostFocus="GrassDrawDistTextBox_LostFocus"  x:Name="GrassDrawDistTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,151,0,0">
-			<TextBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Дальность прорисовки травы. Значение в метрах. Возможно выставить до 500 метров (через настройки в игре только до 200)." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</TextBox.ToolTip>
-		</TextBox>
+        <Slider x:Name="GrassDrawDistSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,144,0,0" Maximum="350" ValueChanged="GrassDrawDistSlider_ValueChanged">
+            <Slider.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Дальность прорисовки травы. Значение в метрах. Возможно выставить до 350 метров (через настройки в игре только до 200)." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </Slider.ToolTip>
+        </Slider>
+        <TextBox LostFocus="GrassDrawDistTextBox_LostFocus"  x:Name="GrassDrawDistTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,144,0,0">
+            <TextBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Дальность прорисовки травы. Значение в метрах. Возможно выставить до 500 метров (через настройки в игре только до 200)." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </TextBox.ToolTip>
+        </TextBox>
 
-		<ComboBox x:Name="WaterQualityComboBox" HorizontalAlignment="Left" Margin="242,176,0,0" VerticalAlignment="Top" Width="280">
-			<ComboBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Качество воды." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</ComboBox.ToolTip>
-		</ComboBox>
-		<ComboBox x:Name="ShadowsQualityComboBox" HorizontalAlignment="Left" Margin="242,201,0,0" VerticalAlignment="Top" Width="280">
-			<ComboBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="качество теней." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</ComboBox.ToolTip>
-		</ComboBox>
-		<Slider x:Name="ShadowBlurCoeffSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,226,0,0" Maximum="50" ValueChanged="ShadowBlurCoeffSlider_ValueChanged" >
-			<Slider.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Размытие теней. Чем меньше значение - тем чётче тень." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</Slider.ToolTip>
-		</Slider>
-		<TextBox LostFocus="ShadowBlurCoeffTextBox_LostFocus"  x:Name="ShadowBlurCoeffTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,226,0,0">
-			<TextBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Размытие теней. Чем меньше значение - тем чётче тень." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</TextBox.ToolTip>
-		</TextBox>
+        <ComboBox x:Name="WaterQualityComboBox" HorizontalAlignment="Left" Margin="242,169,0,0" VerticalAlignment="Top" Width="280">
+            <ComboBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Качество воды." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </ComboBox.ToolTip>
+        </ComboBox>
+        <ComboBox x:Name="ShadowsQualityComboBox" HorizontalAlignment="Left" Margin="242,194,0,0" VerticalAlignment="Top" Width="280">
+            <ComboBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="качество теней." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </ComboBox.ToolTip>
+        </ComboBox>
+        <Slider x:Name="ShadowBlurCoeffSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,219,0,0" Maximum="50" ValueChanged="ShadowBlurCoeffSlider_ValueChanged" >
+            <Slider.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Размытие теней. Чем меньше значение - тем чётче тень." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </Slider.ToolTip>
+        </Slider>
+        <TextBox LostFocus="ShadowBlurCoeffTextBox_LostFocus"  x:Name="ShadowBlurCoeffTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,219,0,0">
+            <TextBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Размытие теней. Чем меньше значение - тем чётче тень." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </TextBox.ToolTip>
+        </TextBox>
 
-		<ComboBox x:Name="PostEffectBloomComboBox" HorizontalAlignment="Left" Margin="242,251,0,0" VerticalAlignment="Top" Width="280">
-			<ComboBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Качество Bloom." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</ComboBox.ToolTip>
-		</ComboBox>
-		<ComboBox x:Name="SmoothingComboBox" HorizontalAlignment="Left" Margin="242,276,0,0" VerticalAlignment="Top" Width="280">
-			<ComboBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Уровень сглаживания текстур." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</ComboBox.ToolTip>
-		</ComboBox>
-		<ComboBox x:Name="TexturesFilterComboBox" HorizontalAlignment="Left" Margin="242,301,0,0" VerticalAlignment="Top" Width="280">
-			<ComboBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Фильтрация текстур." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</ComboBox.ToolTip>
-		</ComboBox>
-		<Slider x:Name="GammaGammaSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,326,0,0" Maximum="1" ValueChanged="GammaGammaSlider_ValueChanged" >
-			<Slider.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Гамма. По умолчанию - 0.5. Меньше - картинка темнее, больше - светлее." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</Slider.ToolTip>
-		</Slider>
-		<TextBox LostFocus="GammaGammaTextBox_LostFocus" x:Name="GammaGammaTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,326,0,0">
-			<TextBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Гамма. По умолчанию - 0.5. Меньше - картинка темнее, больше - светлее." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</TextBox.ToolTip>
-		</TextBox>
+        <ComboBox x:Name="PostEffectBloomComboBox" HorizontalAlignment="Left" Margin="242,244,0,0" VerticalAlignment="Top" Width="280">
+            <ComboBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Качество Bloom." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </ComboBox.ToolTip>
+        </ComboBox>
+        <ComboBox x:Name="SmoothingComboBox" HorizontalAlignment="Left" Margin="242,269,0,0" VerticalAlignment="Top" Width="280">
+            <ComboBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Уровень сглаживания текстур." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </ComboBox.ToolTip>
+        </ComboBox>
+        <ComboBox x:Name="TexturesFilterComboBox" HorizontalAlignment="Left" Margin="242,294,0,0" VerticalAlignment="Top" Width="280">
+            <ComboBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Фильтрация текстур." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </ComboBox.ToolTip>
+        </ComboBox>
+        <Slider x:Name="GammaGammaSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,319,0,0" Maximum="1" ValueChanged="GammaGammaSlider_ValueChanged" >
+            <Slider.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Гамма. По умолчанию - 0.5. Меньше - картинка темнее, больше - светлее." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </Slider.ToolTip>
+        </Slider>
+        <TextBox LostFocus="GammaGammaTextBox_LostFocus" x:Name="GammaGammaTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,319,0,0">
+            <TextBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Гамма. По умолчанию - 0.5. Меньше - картинка темнее, больше - светлее." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </TextBox.ToolTip>
+        </TextBox>
 
-		<CheckBox x:Name="AutoPlayVideoCheckBox" HorizontalAlignment="Left" Margin="242,355,0,0" VerticalAlignment="Top">
-			<CheckBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Проигрывать вступительные ролики при запуске игры." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</CheckBox.ToolTip>
-		</CheckBox>
-		<CheckBox x:Name="DoNotLoadMainmenuLevelCheckBox" HorizontalAlignment="Left" Margin="242,381,0,0" VerticalAlignment="Top">
-			<CheckBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Загружать локацию для анимированного фона в Главном меню игры." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</CheckBox.ToolTip>
-		</CheckBox>
-		<Slider x:Name="FovSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,401,0,0" Maximum="180" IsSnapToTickEnabled="True" ValueChanged="FovSlider_ValueChanged">
-			<Slider.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Угол зрения игрока. Не рекомендуется значение больше 90 градусов (движок игры обрезает модели которые выходят за этот диапазон)." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</Slider.ToolTip>
-		</Slider>
-		<TextBox LostFocus="FovTextBox_LostFocus" x:Name="FovTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,401,0,0">
-			<TextBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Угол зрения игрока. Не рекомендуется значение больше 90 градусов (движок игры обрезает модели которые выходят за этот диапазон)." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</TextBox.ToolTip>
-		</TextBox>
+        <CheckBox x:Name="AutoPlayVideoCheckBox" HorizontalAlignment="Left" Margin="242,348,0,0" VerticalAlignment="Top">
+            <CheckBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Проигрывать вступительные ролики при запуске игры." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </CheckBox.ToolTip>
+        </CheckBox>
+        <CheckBox x:Name="DoNotLoadMainmenuLevelCheckBox" HorizontalAlignment="Left" Margin="242,374,0,0" VerticalAlignment="Top">
+            <CheckBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Загружать локацию для анимированного фона в Главном меню игры." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </CheckBox.ToolTip>
+        </CheckBox>
+        <Slider x:Name="FovSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,394,0,0" Maximum="180" IsSnapToTickEnabled="True" ValueChanged="FovSlider_ValueChanged">
+            <Slider.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Угол зрения игрока. Не рекомендуется значение больше 90 градусов (движок игры обрезает модели которые выходят за этот диапазон)." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </Slider.ToolTip>
+        </Slider>
+        <TextBox LostFocus="FovTextBox_LostFocus" x:Name="FovTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,394,0,0">
+            <TextBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Угол зрения игрока. Не рекомендуется значение больше 90 градусов (движок игры обрезает модели которые выходят за этот диапазон)." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </TextBox.ToolTip>
+        </TextBox>
 
-		<CheckBox x:Name="SwitchCameraAllowCheckBox" HorizontalAlignment="Left" Margin="242,430,0,0" VerticalAlignment="Top">
-			<CheckBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Включить свободную камеру? Активируется в игре кнопкой ''С''." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</CheckBox.ToolTip>
-		</CheckBox>
-		<Slider x:Name="CamSpeedSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,451,0,0" IsSnapToTickEnabled="True" Maximum="1000" ValueChanged="CamSpeedSlider_ValueChanged">
-			<Slider.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Скорость передвижения свободной камерой." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</Slider.ToolTip>
-		</Slider>
-		<TextBox LostFocus="CamSpeedTextBox_LostFocus" x:Name="CamSpeedTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,451,0,0">
-			<TextBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Скорость передвижения свободной камерой." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</TextBox.ToolTip>
-		</TextBox>
+        <CheckBox x:Name="SwitchCameraAllowCheckBox" HorizontalAlignment="Left" Margin="242,423,0,0" VerticalAlignment="Top">
+            <CheckBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Включить свободную камеру? Активируется в игре кнопкой ''С''." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </CheckBox.ToolTip>
+        </CheckBox>
+        <Slider x:Name="CamSpeedSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,444,0,0" IsSnapToTickEnabled="True" Maximum="1000" ValueChanged="CamSpeedSlider_ValueChanged">
+            <Slider.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Скорость передвижения свободной камерой." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </Slider.ToolTip>
+        </Slider>
+        <TextBox LostFocus="CamSpeedTextBox_LostFocus" x:Name="CamSpeedTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,444,0,0">
+            <TextBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Скорость передвижения свободной камерой." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </TextBox.ToolTip>
+        </TextBox>
 
-		<Slider x:Name="MusicVolumeSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,476,0,0" IsSnapToTickEnabled="True" Maximum="100" ValueChanged="MusicVolumeSlider_ValueChanged">
-			<Slider.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Уровень громкости музыки в игре." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</Slider.ToolTip>
-		</Slider>
-		<TextBox LostFocus="MusicVolumeTextBox_LostFocus"  x:Name="MusicVolumeTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,476,0,0">
-			<TextBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Уровень громкости музыки в игре." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</TextBox.ToolTip>
-		</TextBox>
+        <Slider x:Name="MusicVolumeSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,469,0,0" IsSnapToTickEnabled="True" Maximum="100" ValueChanged="MusicVolumeSlider_ValueChanged">
+            <Slider.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Уровень громкости музыки в игре." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </Slider.ToolTip>
+        </Slider>
+        <TextBox LostFocus="MusicVolumeTextBox_LostFocus"  x:Name="MusicVolumeTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,469,0,0">
+            <TextBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Уровень громкости музыки в игре." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </TextBox.ToolTip>
+        </TextBox>
 
-		<Slider x:Name="EffectVolumeSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,501,0,0" IsSnapToTickEnabled="True" Maximum="100" ValueChanged="EffectVolumeSlider_ValueChanged">
-			<Slider.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Уровень громкости эффектов в игре." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</Slider.ToolTip>
-		</Slider>
-		<TextBox LostFocus="EffectVolumeTextBox_LostFocus" x:Name="EffectVolumeTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,501,0,0">
-			<TextBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Уровень громкости эффектов в игре." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</TextBox.ToolTip>
-		</TextBox>
+        <Slider x:Name="EffectVolumeSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,494,0,0" IsSnapToTickEnabled="True" Maximum="100" ValueChanged="EffectVolumeSlider_ValueChanged">
+            <Slider.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Уровень громкости эффектов в игре." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </Slider.ToolTip>
+        </Slider>
+        <TextBox LostFocus="EffectVolumeTextBox_LostFocus" x:Name="EffectVolumeTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,494,0,0">
+            <TextBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Уровень громкости эффектов в игре." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </TextBox.ToolTip>
+        </TextBox>
 
-		<Slider x:Name="SpeakVolumeSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,526,0,0" IsSnapToTickEnabled="True" Maximum="100" ValueChanged="SpeakVolumeSlider_ValueChanged">
-			<Slider.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Уровень громкости речи в игре." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</Slider.ToolTip>
-		</Slider>
-		<TextBox LostFocus="SpeakVolumeTextBox_LostFocus" x:Name="SpeakVolumeTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,526,0,0">
-			<TextBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Уровень громкости речи в игре." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</TextBox.ToolTip>
-		</TextBox>
-		<Label Content="Прицел" HorizontalAlignment="Left" Margin="30,549,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
-		<ComboBox x:Name="SightComboBox" HorizontalAlignment="Left" Margin="242,551,0,0" VerticalAlignment="Top" Width="254">
-			<ComboBox.ToolTip>
-				<ToolTip Background="#feffe7">
-					<StackPanel>
-						<TextBlock Text="Выбор прицела (доступен только в HD)." Margin="3"/>
-					</StackPanel>
-				</ToolTip>
-			</ComboBox.ToolTip>
-		</ComboBox>
-		<Image  Source="InnerResourse/questionmark.png" HorizontalAlignment="Left" Height="22" Margin="501,551,0,0" VerticalAlignment="Top" Width="22" ToolTipService.ShowDuration="3600000" RenderTransformOrigin="14.136,0.818">
-			<Image.ToolTip>
-				<ToolTip>
-					<DockPanel>
-						<Grid>
-							<Grid.RowDefinitions>
-								<RowDefinition Height="25" />
-								<RowDefinition Height="291" />
-							</Grid.RowDefinitions>
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="1024" />
-							</Grid.ColumnDefinitions>
-							<TextBlock  Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">Выбор прицела доступен только в HD mode.</TextBlock>
-							<Grid Grid.Row="1">
-								<Grid.RowDefinitions>
-									<RowDefinition Height="256" />
-									<RowDefinition Height="5" />
-									<RowDefinition Height="15" />
-									<RowDefinition Height="15" />
-								</Grid.RowDefinitions>
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="256" />
-									<ColumnDefinition Width="256" />
-									<ColumnDefinition Width="256" />
-									<ColumnDefinition Width="256" />
-								</Grid.ColumnDefinitions>
-								<Image Grid.Row="0" Grid.Column="0" Source="InnerResourse/Default_cross.png"/>
-								<TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" FontWeight="Bold" >Стандартный</TextBlock>
-								<TextBlock  Grid.Row="3"  Grid.Column="0" HorizontalAlignment="Center">Без отображения наводки ракет.</TextBlock>
-								<Image  Grid.Row="0" Grid.Column="1"  Source="InnerResourse/Sml_cross.png"/>
-								<TextBlock  Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Center" FontWeight="Bold" >Маленький</TextBlock>
-								<TextBlock  Grid.Row="3"  Grid.Column="1" HorizontalAlignment="Center">Без отображения наводки ракет.</TextBlock>
-								<Image  Grid.Row="0" Grid.Column="2"  Source="InnerResourse/Oval_cross.png"/>
-								<TextBlock  Grid.Row="2"  Grid.Column="2" HorizontalAlignment="Center" FontWeight="Bold" >Овальный</TextBlock>
-								<TextBlock  Grid.Row="3"  Grid.Column="2" HorizontalAlignment="Center">С отображением наводки ракет.</TextBlock>
-								<Image  Grid.Row="0" Grid.Column="3"  Source="InnerResourse/Empty_cross.png"/>
-								<TextBlock  Grid.Row="2" Grid.Column="3"  HorizontalAlignment="Center" FontWeight="Bold" >Реалистичный</TextBlock>
-								<TextBlock  Grid.Row="3"  Grid.Column="3" HorizontalAlignment="Center">Только мушка.</TextBlock>
-							</Grid>
-						</Grid>
-					</DockPanel>
-				</ToolTip>
-			</Image.ToolTip>
-		</Image>
-	</Grid>
+        <Slider x:Name="SpeakVolumeSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Margin="242,519,0,0" IsSnapToTickEnabled="True" Maximum="100" ValueChanged="SpeakVolumeSlider_ValueChanged">
+            <Slider.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Уровень громкости речи в игре." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </Slider.ToolTip>
+        </Slider>
+        <TextBox LostFocus="SpeakVolumeTextBox_LostFocus" x:Name="SpeakVolumeTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="62" Margin="460,519,0,0">
+            <TextBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Уровень громкости речи в игре." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </TextBox.ToolTip>
+        </TextBox>
+        <Label Content="Прицел" HorizontalAlignment="Left" Margin="30,542,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <ComboBox x:Name="SightComboBox" HorizontalAlignment="Left" Margin="242,544,0,0" VerticalAlignment="Top" Width="254">
+            <ComboBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Выбор прицела (доступен только в HD)." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </ComboBox.ToolTip>
+        </ComboBox>
+        <Image  Source="InnerResourse/questionmark.png" HorizontalAlignment="Left" Height="22" Margin="501,544,0,0" VerticalAlignment="Top" Width="22" ToolTipService.ShowDuration="3600000" RenderTransformOrigin="14.136,0.818">
+            <Image.ToolTip>
+                <ToolTip>
+                    <DockPanel>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25" />
+                                <RowDefinition Height="291" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1024" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock  Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">Выбор прицела доступен только в HD mode.</TextBlock>
+                            <Grid Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="256" />
+                                    <RowDefinition Height="5" />
+                                    <RowDefinition Height="15" />
+                                    <RowDefinition Height="15" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="256" />
+                                    <ColumnDefinition Width="256" />
+                                    <ColumnDefinition Width="256" />
+                                    <ColumnDefinition Width="256" />
+                                </Grid.ColumnDefinitions>
+                                <Image Grid.Row="0" Grid.Column="0" Source="InnerResourse/Default_cross.png"/>
+                                <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" FontWeight="Bold" >Стандартный</TextBlock>
+                                <TextBlock  Grid.Row="3"  Grid.Column="0" HorizontalAlignment="Center">Без отображения наводки ракет.</TextBlock>
+                                <Image  Grid.Row="0" Grid.Column="1"  Source="InnerResourse/Sml_cross.png"/>
+                                <TextBlock  Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Center" FontWeight="Bold" >Маленький</TextBlock>
+                                <TextBlock  Grid.Row="3"  Grid.Column="1" HorizontalAlignment="Center">Без отображения наводки ракет.</TextBlock>
+                                <Image  Grid.Row="0" Grid.Column="2"  Source="InnerResourse/Oval_cross.png"/>
+                                <TextBlock  Grid.Row="2"  Grid.Column="2" HorizontalAlignment="Center" FontWeight="Bold" >Овальный</TextBlock>
+                                <TextBlock  Grid.Row="3"  Grid.Column="2" HorizontalAlignment="Center">С отображением наводки ракет.</TextBlock>
+                                <Image  Grid.Row="0" Grid.Column="3"  Source="InnerResourse/Empty_cross.png"/>
+                                <TextBlock  Grid.Row="2" Grid.Column="3"  HorizontalAlignment="Center" FontWeight="Bold" >Реалистичный</TextBlock>
+                                <TextBlock  Grid.Row="3"  Grid.Column="3" HorizontalAlignment="Center">Только мушка.</TextBlock>
+                            </Grid>
+                        </Grid>
+                    </DockPanel>
+                </ToolTip>
+            </Image.ToolTip>
+        </Image>
+        <Label Content="PRO настройки графики" HorizontalAlignment="Left" Margin="30,567,0,0" VerticalAlignment="Top" Background="Transparent" FontWeight="Bold"/>
+        <CheckBox x:Name="AdvancedGraphicSettingsCheckBox" HorizontalAlignment="Left" Margin="242,573,0,0" VerticalAlignment="Top">
+            <CheckBox.ToolTip>
+                <ToolTip Background="#feffe7">
+                    <StackPanel>
+                        <TextBlock Text="Настройки влияющие на общее восприятие игры, которые небыли задействованы ранее." Margin="3"/>
+                    </StackPanel>
+                </ToolTip>
+            </CheckBox.ToolTip>
+        </CheckBox>
+    </Grid>
 </Window>

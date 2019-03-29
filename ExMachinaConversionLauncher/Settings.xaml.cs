@@ -12,18 +12,17 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ExMachinaConversionLauncher.Models;
 using ExMachinaConversionLauncher.Services;
 
 namespace ExMachinaConversionLauncher
 {
-    /// <summary>
-    /// Interaction logic for Settings.xaml
-    /// </summary>
     public partial class Settings : Window
     {
-        private string LastHdMode { get; set; }
-        private ConfigReader ConfigReaderLocal { get; set; }
-        readonly GameSettingsService _gameSettings;
+        private readonly ConfigReader _configReaderLocal;
+        private readonly GameSettingsService _gameSettings;
+        private readonly AdvancedGraphicSettingsService _advancedGraphicSettingsService;
+        private readonly List<AdvancedGraphicSettingModel> _advancedGraphicSettingsModels;
         private readonly ErrorHandler _errorHandler;
 
         public Settings(ConfigReader configReader, ErrorHandler errorHandler)
@@ -32,11 +31,13 @@ namespace ExMachinaConversionLauncher
             try
             {
                 _gameSettings = new GameSettingsService(_errorHandler);
-                ConfigReaderLocal = configReader;
-                LastHdMode = ConfigReaderLocal.ReadHdMode();
+                _configReaderLocal = configReader;
                 InitializeComponent();
                 _gameSettings.GetDataFromFile();
                 InitializeSettings();
+
+                _advancedGraphicSettingsService = new AdvancedGraphicSettingsService(Directory.GetCurrentDirectory() + @"\LauncherConfig\AdvancedGraphicSettings.config", _errorHandler);
+                _advancedGraphicSettingsModels = _advancedGraphicSettingsService.GetDataFromFile();
             }
             catch (Exception ex)
             {
@@ -82,8 +83,8 @@ namespace ExMachinaConversionLauncher
             {
                 #region screenResolution
 
-                var resolutionsCollection = ConfigReaderLocal.ResolutionsCollection;
-                ResolutionComboBox.ItemsSource = resolutionsCollection;
+                var resolutionsCollection = _configReaderLocal.Resolutions;
+                ResolutionComboBox.ItemsSource = resolutionsCollection.Select(x=>$"{x.Width}×{x.Height}");
                 ResolutionComboBox.SelectedItem = _gameSettings.Width + "×" + _gameSettings.Height;
 
                 #endregion
@@ -106,7 +107,7 @@ namespace ExMachinaConversionLauncher
             };
                 SightComboBox.ItemsSource = sightCollection;
                 string sightQualityInConfig;
-                switch (LastHdMode)
+                switch (_configReaderLocal.LastLaunchHdMode)
                 {
                     case "WithHDWithSmallSight":
                         sightQualityInConfig = "Маленький";
@@ -316,6 +317,7 @@ namespace ExMachinaConversionLauncher
                 AutoPlayVideoCheckBox.IsChecked = _gameSettings.AutoPlayVideo;
                 DoNotLoadMainmenuLevelCheckBox.IsChecked = !_gameSettings.DoNotLoadMainmenuLevel;
                 SwitchCameraAllowCheckBox.IsChecked = _gameSettings.SwitchCameraAllow;
+                AdvancedGraphicSettingsCheckBox.IsChecked = _configReaderLocal.AdvancedGraphic;
 
                 #endregion
             }
@@ -435,12 +437,22 @@ namespace ExMachinaConversionLauncher
                 if (DoNotLoadMainmenuLevelCheckBox.IsChecked != null) _gameSettings.DoNotLoadMainmenuLevel = (bool)!DoNotLoadMainmenuLevelCheckBox.IsChecked;
                 _gameSettings.Fov = FovSlider.Value;
                 if (SwitchCameraAllowCheckBox.IsChecked != null) _gameSettings.SwitchCameraAllow = (bool)SwitchCameraAllowCheckBox.IsChecked;
+                if (AdvancedGraphicSettingsCheckBox.IsChecked != null) _configReaderLocal.AdvancedGraphic = (bool)AdvancedGraphicSettingsCheckBox.IsChecked;
                 _gameSettings.CamSpeed = Convert.ToInt32(CamSpeedSlider.Value);
                 _gameSettings.Volume = Convert.ToInt32(MusicVolumeSlider.Value);
                 _gameSettings.Volume3D = Convert.ToInt32(EffectVolumeSlider.Value);
                 _gameSettings.Volume2D = Convert.ToInt32(SpeakVolumeSlider.Value);
 
-                _gameSettings.SaveSettingsToConfig();
+                var settingsParametrs = _gameSettings.PrepareSettingsParametrs();
+                var advancedGraphicSettings = _advancedGraphicSettingsService.ConvertAdvancedGraphicSettingsListToDictionary(_advancedGraphicSettingsModels, AdvancedGraphicSettingsCheckBox.IsChecked.GetValueOrDefault());
+
+                var mergedSettings = new Dictionary<string, string>(advancedGraphicSettings);
+                foreach (var settingsParametr in settingsParametrs)
+                {
+                    mergedSettings[settingsParametr.Key] = settingsParametr.Value;
+                }
+
+                _gameSettings.SaveSettingsToConfig(mergedSettings);
 
                 if (HdCheckBox.IsChecked != null && (bool)HdCheckBox.IsChecked)
                 {
@@ -460,11 +472,11 @@ namespace ExMachinaConversionLauncher
                             sightQualityToConfig = "WithHDWithDefaultSight";
                             break;
                     }
-                    writeConfig.UpdateLauncherConfig(new Dictionary<string, string>() { { "<launcherHDMode>", sightQualityToConfig } });
+                    writeConfig.UpdateLauncherConfig(new Dictionary<string, string>() { { "launcherHDMode", sightQualityToConfig }, { "AdvancedGraphic", AdvancedGraphicSettingsCheckBox.IsChecked.ToString().ToLower() } });
                 }
                 else
                 {
-                    writeConfig.UpdateLauncherConfig(new Dictionary<string, string>() { { "<launcherHDMode>", "WithOutHD" } });
+                    writeConfig.UpdateLauncherConfig(new Dictionary<string, string>() { { "launcherHDMode", "WithOutHD" }, { "AdvancedGraphic", AdvancedGraphicSettingsCheckBox.IsChecked.ToString().ToLower() } });
                 }
 
                 this.Close();
@@ -631,8 +643,7 @@ namespace ExMachinaConversionLauncher
 
                 if (Math.Abs(ratio - 16.0 / 9.0) < 0.01 || Math.Abs(ratio - 16.0 / 10.0) < 0.01)
                 {
-                    LastHdMode = ConfigReaderLocal.ReadHdMode();
-                    if (LastHdMode == "WithOutHD" && e.AddedItems.Count != e.RemovedItems.Count)
+                    if (_configReaderLocal.LastLaunchHdMode == "WithOutHD" && e.AddedItems.Count != e.RemovedItems.Count)
                     {
                         SightComboBox.IsEnabled = false;
                         HdCheckBox.IsChecked = false;

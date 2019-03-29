@@ -43,10 +43,12 @@ namespace ExMachinaConversionLauncher.Services
         internal int ProjectorsFarDist { get; set; }
 
         private readonly ErrorHandler _errorHandler;
+        private readonly ToolsService _toolsService;
 
         public GameSettingsService(ErrorHandler errorHandler)
         {
             _errorHandler = errorHandler;
+            _toolsService = new ToolsService();
         }
 
 
@@ -83,7 +85,7 @@ namespace ExMachinaConversionLauncher.Services
                             break;
                         case "dsShadows":
                             value = GetValue(line);
-                            DsShadows = BooleanValue(value);
+                            DsShadows = _toolsService.BooleanValue(value);
                             break;
                         case "detShadowTexSz":
                             value = GetValue(line);
@@ -143,11 +145,11 @@ namespace ExMachinaConversionLauncher.Services
                             break;
                         case "autoPlayVideo":
                             value = GetValue(line);
-                            AutoPlayVideo = BooleanValue(value);
+                            AutoPlayVideo = _toolsService.BooleanValue(value);
                             break;
                         case "DoNotLoadMainmenuLevel":
                             value = GetValue(line);
-                            DoNotLoadMainmenuLevel = BooleanValue(value);
+                            DoNotLoadMainmenuLevel = _toolsService.BooleanValue(value);
                             break;
                         case "camSpeed":
                             value = GetValue(line);
@@ -159,7 +161,7 @@ namespace ExMachinaConversionLauncher.Services
                             break;
                         case "g_switchCameraAllow":
                             value = GetValue(line);
-                            SwitchCameraAllow = BooleanValue(value);
+                            SwitchCameraAllow = _toolsService.BooleanValue(value);
                             break;
                     }
                 }
@@ -202,78 +204,62 @@ namespace ExMachinaConversionLauncher.Services
             }
         }
 
-        private bool BooleanValue(string value)
+        internal Dictionary<string, string> PrepareSettingsParametrs()
         {
             try
             {
-                switch (value.ToLower())
+                var settingsParametrs = new Dictionary<string, string>()
                 {
-                    case "yes":
-                    case "true":
-                    case "1":
-                        return true;
-                    default:
-                        return false;
-                }
+                    {"lsViewDistanceDivider",String.Format(CultureInfo.InvariantCulture, "{0:N2}", LsViewDistanceDivider)},
+                    {"r_multiSamplesNum",Convert.ToString(MultiSamplesNum, CultureInfo.InvariantCulture)},
+                    {"g_postEffectBloom",Convert.ToString(PostEffectBloom, CultureInfo.InvariantCulture)},
+                    {"g_texturesFilter",Convert.ToString(TexturesFilter, CultureInfo.InvariantCulture)},
+                    {"shaderMacro1",ShaderMacro1},
+                    {"dsShadows",Convert.ToString(DsShadows, CultureInfo.InvariantCulture).ToLower()},
+                    {"detShadowTexSz",Convert.ToString(DetShadowTexSz, CultureInfo.InvariantCulture)},
+                    {"g_shadowBlurCoeff",String.Format(CultureInfo.InvariantCulture, "{0:N2}", ShadowBlurCoeff)},
+                    {"lgtShadowTexSz",Convert.ToString(LgtShadowTexSz, CultureInfo.InvariantCulture)},
+                    {"g_grassDrawDist",String.Format(CultureInfo.InvariantCulture, "{0:N2}", GrassDrawDist)},
+                    {"r_waterQuality",Convert.ToString(WaterQuality, CultureInfo.InvariantCulture)},
+                    {"gammaGamma",String.Format(CultureInfo.InvariantCulture, "{0:N2}", Gamma)},
+                    {"r_desiredHeight",Convert.ToString(DesiredHeight, CultureInfo.InvariantCulture)},
+                    {"r_desiredWidth",Convert.ToString(DesiredWidth, CultureInfo.InvariantCulture)},
+                    {"r_height",Convert.ToString(Height, CultureInfo.InvariantCulture)},
+                    {"r_width",Convert.ToString(Width, CultureInfo.InvariantCulture)},
+                    {"mus_Volume",Convert.ToString(Volume, CultureInfo.InvariantCulture)},
+                    {"snd_2dVolume",Convert.ToString(Volume2D, CultureInfo.InvariantCulture)},
+                    {"snd_3dVolume",Convert.ToString(Volume3D, CultureInfo.InvariantCulture)},
+                    {"fov",String.Format(CultureInfo.InvariantCulture, "{0:N2}", Fov)},
+                    {"autoPlayVideo",Convert.ToString(AutoPlayVideo, CultureInfo.InvariantCulture).ToLower()},
+                    {"DoNotLoadMainmenuLevel",Convert.ToString(DoNotLoadMainmenuLevel, CultureInfo.InvariantCulture).ToLower()},
+                    {"camSpeed",Convert.ToString(CamSpeed, CultureInfo.InvariantCulture)},
+                    {"g_projectorsFarDist",Convert.ToString(ProjectorsFarDist, CultureInfo.InvariantCulture)},
+                    {"g_switchCameraAllow",Convert.ToString(SwitchCameraAllow, CultureInfo.InvariantCulture).ToLower()}
+                };
+                return settingsParametrs;
             }
             catch (Exception ex)
             {
-                _errorHandler.CallErrorWindows(ex, "BooleanValue");
-                return false;
+                _errorHandler.CallErrorWindows(ex, "PrepareSettingsParametrs");
+                return new Dictionary<string, string>();
             }
         }
 
-        internal void SaveSettingsToConfig()
+
+        internal void SaveSettingsToConfig(Dictionary<string, string> settingsParametrs)
         {
             try
             {
                 var gameConfig = File.ReadAllText(Directory.GetCurrentDirectory() + @"\data\config.cfg");
-                Dictionary<string, string> parametrsList = new Dictionary<string, string>();
 
-                try
+                foreach (var settingsParametr in settingsParametrs)
                 {
-                    parametrsList = new Dictionary<string, string>()
-                    {
-                        {"lsViewDistanceDivider",String.Format(CultureInfo.InvariantCulture, "{0:N2}", LsViewDistanceDivider)},
-                        {"r_multiSamplesNum",Convert.ToString(MultiSamplesNum, CultureInfo.InvariantCulture)},
-                        {"g_postEffectBloom",Convert.ToString(PostEffectBloom, CultureInfo.InvariantCulture)},
-                        {"g_texturesFilter",Convert.ToString(TexturesFilter, CultureInfo.InvariantCulture)},
-                        {"shaderMacro1",ShaderMacro1},
-                        {"dsShadows",Convert.ToString(DsShadows, CultureInfo.InvariantCulture).ToLower()},
-                        {"detShadowTexSz",Convert.ToString(DetShadowTexSz, CultureInfo.InvariantCulture)},
-                        {"g_shadowBlurCoeff",String.Format(CultureInfo.InvariantCulture, "{0:N2}", ShadowBlurCoeff)},
-                        {"lgtShadowTexSz",Convert.ToString(LgtShadowTexSz, CultureInfo.InvariantCulture)},
-                        {"g_grassDrawDist",String.Format(CultureInfo.InvariantCulture, "{0:N2}", GrassDrawDist)},
-                        {"r_waterQuality",Convert.ToString(WaterQuality, CultureInfo.InvariantCulture)},
-                        {"gammaGamma",String.Format(CultureInfo.InvariantCulture, "{0:N2}", Gamma)},
-                        {"r_desiredHeight",Convert.ToString(DesiredHeight, CultureInfo.InvariantCulture)},
-                        {"r_desiredWidth",Convert.ToString(DesiredWidth, CultureInfo.InvariantCulture)},
-                        {"r_height",Convert.ToString(Height, CultureInfo.InvariantCulture)},
-                        {"r_width",Convert.ToString(Width, CultureInfo.InvariantCulture)},
-                        {"mus_Volume",Convert.ToString(Volume, CultureInfo.InvariantCulture)},
-                        {"snd_2dVolume",Convert.ToString(Volume2D, CultureInfo.InvariantCulture)},
-                        {"snd_3dVolume",Convert.ToString(Volume3D, CultureInfo.InvariantCulture)},
-                        {"fov",String.Format(CultureInfo.InvariantCulture, "{0:N2}", Fov)},
-                        {"autoPlayVideo",Convert.ToString(AutoPlayVideo, CultureInfo.InvariantCulture).ToLower()},
-                        {"DoNotLoadMainmenuLevel",Convert.ToString(DoNotLoadMainmenuLevel, CultureInfo.InvariantCulture).ToLower()},
-                        {"camSpeed",Convert.ToString(CamSpeed, CultureInfo.InvariantCulture)},
-                        {"g_projectorsFarDist",Convert.ToString(ProjectorsFarDist, CultureInfo.InvariantCulture)},
-                        {"g_switchCameraAllow",Convert.ToString(SwitchCameraAllow, CultureInfo.InvariantCulture).ToLower()}
-                    };
-                }
-                catch (Exception ex)
-                {
-                    _errorHandler.CallErrorWindows(ex, "SaveSettingsToConfig - parametrsList");
-                }
-
-                foreach (var parametr in parametrsList)
-                {
-                    var startIndex = gameConfig.IndexOf(parametr.Key, StringComparison.InvariantCulture) + parametr.Key.Length + 2;
+                    var startIndex = gameConfig.IndexOf(settingsParametr.Key, StringComparison.InvariantCulture) + settingsParametr.Key.Length + 2;
                     var endIndex = gameConfig.IndexOf("\"", startIndex, StringComparison.InvariantCulture);
 
                     var gameConfigStringBuilder = new StringBuilder(gameConfig);
                     gameConfigStringBuilder.Remove(startIndex, endIndex - startIndex);
-                    gameConfigStringBuilder.Insert(startIndex, parametr.Value);
+                    gameConfigStringBuilder.Insert(startIndex, settingsParametr.Value);
                     gameConfig = gameConfigStringBuilder.ToString();
                 }
 
@@ -283,7 +269,6 @@ namespace ExMachinaConversionLauncher.Services
             {
                 _errorHandler.CallErrorWindows(ex, "SaveSettingsToConfig");
             }
-        }
-
+}
     }
 }
