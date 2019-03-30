@@ -18,11 +18,9 @@ namespace ExMachinaConversionLauncher
     /// </summary>
     public partial class Error : Window
     {
-        private Window _mainindow;
-        private bool _closeApp;
-        public Error(Window mainWindow, string validationError, bool closeApp = true)
+        private readonly bool _closeApp;
+        public Error(string validationError, bool closeApp = true)
         {
-            _mainindow = mainWindow;
             _closeApp = closeApp;
             InitializeComponent();
             ErroeTextBlock.Text = validationError;

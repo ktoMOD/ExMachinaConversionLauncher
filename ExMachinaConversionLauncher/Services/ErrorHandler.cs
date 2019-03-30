@@ -1,26 +1,18 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using System.Windows;
 
 namespace ExMachinaConversionLauncher.Services
 {
     public class ErrorHandler
     {
-        private static Window _mainindow;
-
-        public ErrorHandler(Window mainindow)
+        public void CallErrorWindows(Exception ex, string exceptionLocate)
         {
-            _mainindow = mainindow;
-        }
-
-        public void CallErrorWindows(Exception ex, string exeptionLocate)
-        {
-            var errorMessage = String.Format("{2}: Application was crashad at {0} function with exeption: {1}",
-                exeptionLocate, System.Environment.NewLine + ex.Message + " " + ex.InnerException, DateTime.Now);
+            var errorMessage = string.Format("{2}: Application was crashed at {0} function with exception: {1}",
+                exceptionLocate, Environment.NewLine + ex.Message + " " + ex.InnerException, DateTime.Now);
             var dateTime = DateTime.Now.ToString("yyyyMMddHHmmss",CultureInfo.InvariantCulture);
             File.WriteAllText("launcherError_" + dateTime + ".log", errorMessage);
-            var errorWindow = new Error(_mainindow, errorMessage);
+            var errorWindow = new Error(errorMessage);
             errorWindow.ShowDialog();
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace ExMachinaConversionLauncher.Models
 {
-    class FontScaleParamForHdModel
+    internal class FontScaleParamForHdModel
     {
         internal readonly double ScaleFactor;
         internal readonly int WndFontSize;

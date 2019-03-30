@@ -60,11 +60,15 @@
     </ApplicationDefinition>
     <Compile Include="Models\AdvancedGraphicSettingModel.cs" />
     <Compile Include="Models\FontScaleParamForHdModel.cs" />
+    <Compile Include="Models\GameConfigParameterModel.cs" />
+    <Compile Include="Models\GameConfigsModel.cs" />
+    <Compile Include="Models\GameConfigUiOptionModel.cs" />
     <Compile Include="Models\GameModel.cs" />
     <Compile Include="Models\ResolutionModel.cs" />
     <Compile Include="Services\AdvancedGraphicSettingsService.cs" />
     <Compile Include="Services\ErrorHandler.cs" />
     <Compile Include="Services\GameSettingsService.cs" />
+    <Compile Include="Services\GameConfigsReader.cs" />
     <Compile Include="Services\ToolsService.cs" />
     <Compile Include="Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
@@ -94,7 +98,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Services\ConfigReader.cs" />
+    <Compile Include="Services\LauncherConfigReader.cs" />
     <Compile Include="Services\WriteConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

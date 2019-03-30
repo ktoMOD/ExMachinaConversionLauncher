@@ -19,19 +19,20 @@ namespace ExMachinaConversionLauncher
 {
     public partial class Settings : Window
     {
-        private readonly ConfigReader _configReaderLocal;
+        private readonly LauncherConfigReader _launcherConfigReader;
         private readonly GameSettingsService _gameSettings;
         private readonly AdvancedGraphicSettingsService _advancedGraphicSettingsService;
         private readonly List<AdvancedGraphicSettingModel> _advancedGraphicSettingsModels;
         private readonly ErrorHandler _errorHandler;
 
-        public Settings(ConfigReader configReader, ErrorHandler errorHandler)
+        public Settings(ErrorHandler errorHandler)
         {
             _errorHandler = errorHandler;
             try
             {
                 _gameSettings = new GameSettingsService(_errorHandler);
-                _configReaderLocal = configReader;
+                _launcherConfigReader = new LauncherConfigReader(Directory.GetCurrentDirectory() + @"\LauncherConfig\Launcher.config", _errorHandler);
+                _launcherConfigReader.GetDataFromFile();
                 InitializeComponent();
                 _gameSettings.GetDataFromFile();
                 InitializeSettings();
@@ -83,7 +84,7 @@ namespace ExMachinaConversionLauncher
             {
                 #region screenResolution
 
-                var resolutionsCollection = _configReaderLocal.Resolutions;
+                var resolutionsCollection = _launcherConfigReader.Resolutions;
                 ResolutionComboBox.ItemsSource = resolutionsCollection.Select(x=>$"{x.Width}×{x.Height}");
                 ResolutionComboBox.SelectedItem = _gameSettings.Width + "×" + _gameSettings.Height;
 
@@ -107,7 +108,7 @@ namespace ExMachinaConversionLauncher
             };
                 SightComboBox.ItemsSource = sightCollection;
                 string sightQualityInConfig;
-                switch (_configReaderLocal.LastLaunchHdMode)
+                switch (_launcherConfigReader.LastLaunchHdMode)
                 {
                     case "WithHDWithSmallSight":
                         sightQualityInConfig = "Маленький";
@@ -143,7 +144,7 @@ namespace ExMachinaConversionLauncher
                 "Высокое"
             };
                 WaterQualityComboBox.ItemsSource = waterQualityCollection;
-                string waterQualityInConfig = String.Empty;
+                var waterQualityInConfig = String.Empty;
                 switch (_gameSettings.WaterQuality)
                 {
                     case 1:
@@ -176,8 +177,8 @@ namespace ExMachinaConversionLauncher
                 "Высокое"
             };
                 ShadowsQualityComboBox.ItemsSource = shadowsQualityCollection;
-                string shadowsQualityForSelect = String.Empty;
-                string shadowsQualityInConfig = Convert.ToString(_gameSettings.DsShadows) + "_" +
+                var shadowsQualityForSelect = String.Empty;
+                var shadowsQualityInConfig = Convert.ToString(_gameSettings.DsShadows) + "_" +
                                                 Convert.ToString(_gameSettings.DetShadowTexSz) + "_" +
                                                 Convert.ToString(_gameSettings.LgtShadowTexSz);
 
@@ -214,7 +215,7 @@ namespace ExMachinaConversionLauncher
                 "Высокое"
             };
                 PostEffectBloomComboBox.ItemsSource = postEffectBloomCollection;
-                string postEffectBloomInConfig = String.Empty;
+                var postEffectBloomInConfig = String.Empty;
                 switch (_gameSettings.PostEffectBloom)
                 {
                     case 0:
@@ -248,7 +249,7 @@ namespace ExMachinaConversionLauncher
                 "×8"
             };
                 SmoothingComboBox.ItemsSource = smoothingCollection;
-                string smoothingInConfig = String.Empty;
+                var smoothingInConfig = String.Empty;
                 switch (_gameSettings.MultiSamplesNum)
                 {
                     case 0:
@@ -284,8 +285,8 @@ namespace ExMachinaConversionLauncher
                 "Анизотропная"
             };
                 TexturesFilterComboBox.ItemsSource = texturesFilterCollection;
-                string texturesFilterForSelect = String.Empty;
-                string texturesFilterInConfig = Convert.ToString(_gameSettings.TexturesFilter) + "_" +
+                var texturesFilterForSelect = String.Empty;
+                var texturesFilterInConfig = Convert.ToString(_gameSettings.TexturesFilter) + "_" +
                                                 Convert.ToString(_gameSettings.ShaderMacro1);
 
 
@@ -317,7 +318,7 @@ namespace ExMachinaConversionLauncher
                 AutoPlayVideoCheckBox.IsChecked = _gameSettings.AutoPlayVideo;
                 DoNotLoadMainmenuLevelCheckBox.IsChecked = !_gameSettings.DoNotLoadMainmenuLevel;
                 SwitchCameraAllowCheckBox.IsChecked = _gameSettings.SwitchCameraAllow;
-                AdvancedGraphicSettingsCheckBox.IsChecked = _configReaderLocal.AdvancedGraphic;
+                AdvancedGraphicSettingsCheckBox.IsChecked = _launcherConfigReader.AdvancedGraphic;
 
                 #endregion
             }
@@ -349,7 +350,7 @@ namespace ExMachinaConversionLauncher
         {
             try
             {
-                WriteConfig writeConfig = new WriteConfig(_errorHandler);
+                var writeConfig = new WriteConfig(_errorHandler);
 
                 var resolution = ResolutionComboBox.SelectedItem.ToString().Split('×');
                 _gameSettings.DesiredHeight = Convert.ToInt32(resolution[1]);
@@ -437,17 +438,17 @@ namespace ExMachinaConversionLauncher
                 if (DoNotLoadMainmenuLevelCheckBox.IsChecked != null) _gameSettings.DoNotLoadMainmenuLevel = (bool)!DoNotLoadMainmenuLevelCheckBox.IsChecked;
                 _gameSettings.Fov = FovSlider.Value;
                 if (SwitchCameraAllowCheckBox.IsChecked != null) _gameSettings.SwitchCameraAllow = (bool)SwitchCameraAllowCheckBox.IsChecked;
-                if (AdvancedGraphicSettingsCheckBox.IsChecked != null) _configReaderLocal.AdvancedGraphic = (bool)AdvancedGraphicSettingsCheckBox.IsChecked;
+                if (AdvancedGraphicSettingsCheckBox.IsChecked != null) _launcherConfigReader.AdvancedGraphic = (bool)AdvancedGraphicSettingsCheckBox.IsChecked;
                 _gameSettings.CamSpeed = Convert.ToInt32(CamSpeedSlider.Value);
                 _gameSettings.Volume = Convert.ToInt32(MusicVolumeSlider.Value);
                 _gameSettings.Volume3D = Convert.ToInt32(EffectVolumeSlider.Value);
                 _gameSettings.Volume2D = Convert.ToInt32(SpeakVolumeSlider.Value);
 
-                var settingsParametrs = _gameSettings.PrepareSettingsParametrs();
+                var settingsParameters = _gameSettings.PrepareSettingsParameters();
                 var advancedGraphicSettings = _advancedGraphicSettingsService.ConvertAdvancedGraphicSettingsListToDictionary(_advancedGraphicSettingsModels, AdvancedGraphicSettingsCheckBox.IsChecked.GetValueOrDefault());
 
                 var mergedSettings = new Dictionary<string, string>(advancedGraphicSettings);
-                foreach (var settingsParametr in settingsParametrs)
+                foreach (var settingsParametr in settingsParameters)
                 {
                     mergedSettings[settingsParametr.Key] = settingsParametr.Value;
                 }
@@ -472,11 +473,11 @@ namespace ExMachinaConversionLauncher
                             sightQualityToConfig = "WithHDWithDefaultSight";
                             break;
                     }
-                    writeConfig.UpdateLauncherConfig(new Dictionary<string, string>() { { "launcherHDMode", sightQualityToConfig }, { "AdvancedGraphic", AdvancedGraphicSettingsCheckBox.IsChecked.ToString().ToLower() } });
+                    writeConfig.UpdateLauncherConfig(new Dictionary<string, string>() { { "launcherHDMode", sightQualityToConfig }, { "advancedGraphic", AdvancedGraphicSettingsCheckBox.IsChecked.ToString().ToLower() } });
                 }
                 else
                 {
-                    writeConfig.UpdateLauncherConfig(new Dictionary<string, string>() { { "launcherHDMode", "WithOutHD" }, { "AdvancedGraphic", AdvancedGraphicSettingsCheckBox.IsChecked.ToString().ToLower() } });
+                    writeConfig.UpdateLauncherConfig(new Dictionary<string, string>() { { "launcherHDMode", "WithOutHD" }, { "advancedGraphic", AdvancedGraphicSettingsCheckBox.IsChecked.ToString().ToLower() } });
                 }
 
                 this.Close();
@@ -643,7 +644,7 @@ namespace ExMachinaConversionLauncher
 
                 if (Math.Abs(ratio - 16.0 / 9.0) < 0.01 || Math.Abs(ratio - 16.0 / 10.0) < 0.01)
                 {
-                    if (_configReaderLocal.LastLaunchHdMode == "WithOutHD" && e.AddedItems.Count != e.RemovedItems.Count)
+                    if (_launcherConfigReader.LastLaunchHdMode == "WithOutHD" && e.AddedItems.Count != e.RemovedItems.Count)
                     {
                         SightComboBox.IsEnabled = false;
                         HdCheckBox.IsChecked = false;
@@ -672,8 +673,7 @@ namespace ExMachinaConversionLauncher
         {
             try
             {
-                double viewDistance;
-                bool isDouble = Double.TryParse(ViewDistanceTextBox.Text.Replace(",", "."), out viewDistance);
+                var isDouble = double.TryParse(ViewDistanceTextBox.Text.Replace(",", "."), out var viewDistance);
                 if (isDouble && viewDistance >= 0 && viewDistance <= 1)
                 {
                     ViewDistanceSlider.Value = viewDistance;
@@ -681,7 +681,7 @@ namespace ExMachinaConversionLauncher
                 else
                 {
                     ViewDistanceTextBox.Text = Convert.ToString(Math.Round(ViewDistanceSlider.Value, 2), CultureInfo.InvariantCulture);
-                    var errorWindow = new Error(this, "Неверное значение. Введите значение от 0 до 1.", false);
+                    var errorWindow = new Error("Неверное значение. Введите значение от 0 до 1.", false);
                     errorWindow.ShowDialog();
                 }
             }
@@ -695,8 +695,7 @@ namespace ExMachinaConversionLauncher
         {
             try
             {
-                int projectorsFarDistSlider;
-                bool isInt = Int32.TryParse(ProjectorsFarDistTextBox.Text.Replace(",", "."), out projectorsFarDistSlider);
+                var isInt = int.TryParse(ProjectorsFarDistTextBox.Text.Replace(",", "."), out var projectorsFarDistSlider);
                 if (isInt && projectorsFarDistSlider >= 0 && projectorsFarDistSlider <= 5)
                 {
                     ProjectorsFarDistSlider.Value = projectorsFarDistSlider;
@@ -704,7 +703,7 @@ namespace ExMachinaConversionLauncher
                 else
                 {
                     ProjectorsFarDistTextBox.Text = Convert.ToString(Math.Round(ProjectorsFarDistSlider.Value, 2), CultureInfo.InvariantCulture);
-                    var errorWindow = new Error(this, "Неверное значение. Введите целое значение от 0 до 5.", false);
+                    var errorWindow = new Error("Неверное значение. Введите целое значение от 0 до 5.", false);
                     errorWindow.ShowDialog();
                 }
             }
@@ -718,8 +717,7 @@ namespace ExMachinaConversionLauncher
         {
             try
             {
-                int grassDrawDistance;
-                bool isInt = Int32.TryParse(GrassDrawDistTextBox.Text.Replace(",", "."), out grassDrawDistance);
+                var isInt = int.TryParse(GrassDrawDistTextBox.Text.Replace(",", "."), out var grassDrawDistance);
                 if (isInt && grassDrawDistance >= 0 && grassDrawDistance <= 350)
                 {
                     GrassDrawDistSlider.Value = grassDrawDistance;
@@ -727,7 +725,7 @@ namespace ExMachinaConversionLauncher
                 else
                 {
                     GrassDrawDistTextBox.Text = Convert.ToString(Math.Round(GrassDrawDistSlider.Value, 2), CultureInfo.InvariantCulture);
-                    var errorWindow = new Error(this, "Неверное значение. Введите целое значение от 0 до 350.", false);
+                    var errorWindow = new Error("Неверное значение. Введите целое значение от 0 до 350.", false);
                     errorWindow.ShowDialog();
                 }
             }
@@ -741,8 +739,7 @@ namespace ExMachinaConversionLauncher
         {
             try
             {
-                int shadowBlurCoeff;
-                bool isInt = Int32.TryParse(ShadowBlurCoeffTextBox.Text.Replace(",", "."), out shadowBlurCoeff);
+                var isInt = int.TryParse(ShadowBlurCoeffTextBox.Text.Replace(",", "."), out var shadowBlurCoeff);
                 if (isInt && shadowBlurCoeff >= 0 && shadowBlurCoeff <= 50)
                 {
                     ShadowBlurCoeffSlider.Value = shadowBlurCoeff;
@@ -750,7 +747,7 @@ namespace ExMachinaConversionLauncher
                 else
                 {
                     ShadowBlurCoeffTextBox.Text = Convert.ToString(Math.Round(ShadowBlurCoeffSlider.Value, 2), CultureInfo.InvariantCulture);
-                    var errorWindow = new Error(this, "Неверное значение. Введите целое значение от 0 до 50.", false);
+                    var errorWindow = new Error("Неверное значение. Введите целое значение от 0 до 50.", false);
                     errorWindow.ShowDialog();
                 }
             }
@@ -764,8 +761,7 @@ namespace ExMachinaConversionLauncher
         {
             try
             {
-                double gamma;
-                bool isDouble = Double.TryParse(GammaGammaTextBox.Text.Replace(",", "."), out gamma);
+                var isDouble = double.TryParse(GammaGammaTextBox.Text.Replace(",", "."), out var gamma);
                 if (isDouble && gamma >= 0 && gamma <= 1)
                 {
                     GammaGammaSlider.Value = gamma;
@@ -773,7 +769,7 @@ namespace ExMachinaConversionLauncher
                 else
                 {
                     GammaGammaTextBox.Text = Convert.ToString(Math.Round(GammaGammaSlider.Value, 2), CultureInfo.InvariantCulture);
-                    var errorWindow = new Error(this, "Неверное значение. Введите значение от 0 до 1.", false);
+                    var errorWindow = new Error("Неверное значение. Введите значение от 0 до 1.", false);
                     errorWindow.ShowDialog();
                 }
             }
@@ -787,8 +783,7 @@ namespace ExMachinaConversionLauncher
         {
             try
             {
-                int fov;
-                bool isInt = Int32.TryParse(FovTextBox.Text.Replace(",", "."), out fov);
+                var isInt = int.TryParse(FovTextBox.Text.Replace(",", "."), out var fov);
                 if (isInt && fov >= 0 && fov <= 180)
                 {
                     FovSlider.Value = fov;
@@ -796,7 +791,7 @@ namespace ExMachinaConversionLauncher
                 else
                 {
                     FovTextBox.Text = Convert.ToString(Math.Round(FovSlider.Value, 2), CultureInfo.InvariantCulture);
-                    var errorWindow = new Error(this, "Неверное значение. Введите целое значение от 0 до 180.", false);
+                    var errorWindow = new Error("Неверное значение. Введите целое значение от 0 до 180.", false);
                     errorWindow.ShowDialog();
                 }
             }
@@ -810,8 +805,7 @@ namespace ExMachinaConversionLauncher
         {
             try
             {
-                int camSpeed;
-                bool isInt = Int32.TryParse(CamSpeedTextBox.Text.Replace(",", "."), out camSpeed);
+                var isInt = int.TryParse(CamSpeedTextBox.Text.Replace(",", "."), out var camSpeed);
                 if (isInt && camSpeed >= 0 && camSpeed <= 1000)
                 {
                     CamSpeedSlider.Value = camSpeed;
@@ -819,7 +813,7 @@ namespace ExMachinaConversionLauncher
                 else
                 {
                     CamSpeedTextBox.Text = Convert.ToString(Math.Round(CamSpeedSlider.Value, 2), CultureInfo.InvariantCulture);
-                    var errorWindow = new Error(this, "Неверное значение. Введите целое значение от 0 до 1000.", false);
+                    var errorWindow = new Error("Неверное значение. Введите целое значение от 0 до 1000.", false);
                     errorWindow.ShowDialog();
                 }
             }
@@ -833,8 +827,7 @@ namespace ExMachinaConversionLauncher
         {
             try
             {
-                int musicVolume;
-                bool isInt = Int32.TryParse(MusicVolumeTextBox.Text.Replace(",", "."), out musicVolume);
+                var isInt = int.TryParse(MusicVolumeTextBox.Text.Replace(",", "."), out var musicVolume);
                 if (isInt && musicVolume >= 0 && musicVolume <= 100)
                 {
                     MusicVolumeSlider.Value = musicVolume;
@@ -842,7 +835,7 @@ namespace ExMachinaConversionLauncher
                 else
                 {
                     MusicVolumeTextBox.Text = Convert.ToString(Math.Round(MusicVolumeSlider.Value, 2), CultureInfo.InvariantCulture);
-                    var errorWindow = new Error(this, "Неверное значение. Введите целое значение от 0 до 100.", false);
+                    var errorWindow = new Error("Неверное значение. Введите целое значение от 0 до 100.", false);
                     errorWindow.ShowDialog();
                 }
             }
@@ -856,8 +849,7 @@ namespace ExMachinaConversionLauncher
         {
             try
             {
-                int effectVolume;
-                bool isInt = Int32.TryParse(EffectVolumeTextBox.Text.Replace(",", "."), out effectVolume);
+                var isInt = int.TryParse(EffectVolumeTextBox.Text.Replace(",", "."), out var effectVolume);
                 if (isInt && effectVolume >= 0 && effectVolume <= 100)
                 {
                     EffectVolumeSlider.Value = effectVolume;
@@ -865,7 +857,7 @@ namespace ExMachinaConversionLauncher
                 else
                 {
                     EffectVolumeTextBox.Text = Convert.ToString(Math.Round(EffectVolumeSlider.Value, 2), CultureInfo.InvariantCulture);
-                    var errorWindow = new Error(this, "Неверное значение. Введите целое значение от 0 до 100.", false);
+                    var errorWindow = new Error("Неверное значение. Введите целое значение от 0 до 100.", false);
                     errorWindow.ShowDialog();
                 }
             }
@@ -879,8 +871,7 @@ namespace ExMachinaConversionLauncher
         {
             try
             {
-                int speakVolume;
-                bool isInt = Int32.TryParse(SpeakVolumeTextBox.Text.Replace(",", "."), out speakVolume);
+                var isInt = int.TryParse(SpeakVolumeTextBox.Text.Replace(",", "."), out var speakVolume);
                 if (isInt && speakVolume >= 0 && speakVolume <= 100)
                 {
                     SpeakVolumeSlider.Value = speakVolume;
@@ -888,7 +879,7 @@ namespace ExMachinaConversionLauncher
                 else
                 {
                     SpeakVolumeTextBox.Text = Convert.ToString(Math.Round(SpeakVolumeSlider.Value, 2), CultureInfo.InvariantCulture);
-                    var errorWindow = new Error(this, "Неверное значение. Введите целое значение от 0 до 100.", false);
+                    var errorWindow = new Error("Неверное значение. Введите целое значение от 0 до 100.", false);
                     errorWindow.ShowDialog();
                 }
             }

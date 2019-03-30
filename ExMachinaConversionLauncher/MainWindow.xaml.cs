@@ -8,32 +8,33 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using ExMachinaConversionLauncher.Models;
 using ExMachinaConversionLauncher.Services;
 
 namespace ExMachinaConversionLauncher
 {
     public partial class MainWindow : Window
     {
-        private readonly ConfigReader _configReader;
+        private readonly LauncherConfigReader _launcherConfigReader;
         private readonly ErrorHandler _errorHandler;
 
         public MainWindow()
         {
-            _errorHandler = new ErrorHandler(this);
+            _errorHandler = new ErrorHandler();
             try
             {
                 InitializeComponent();
 
-                _configReader = new ConfigReader(Directory.GetCurrentDirectory() + @"\LauncherConfig\Launcher.config", _errorHandler);
-                _configReader.GetDataFromFile();
-                _configReader.Games.ForEach(x => ListOfMods.Items.Add(x.Name));
-                ListOfMods.SelectedItem = _configReader.LastLaunchGame;
+                _launcherConfigReader = new LauncherConfigReader(Directory.GetCurrentDirectory() + @"\LauncherConfig\Launcher.config", _errorHandler);
+                _launcherConfigReader.GetDataFromFile();
+                _launcherConfigReader.Games.ForEach(x => ListOfMods.Items.Add(x.Name));
+                ListOfMods.SelectedItem = _launcherConfigReader.LastLaunchGame;
                 string[] launchMods = { "Первое ядро CPU", "Второе ядро CPU", "Все ядра CPU" };
                 ListOfLaunchMode.ItemsSource = launchMods;
-                ListOfLaunchMode.SelectedItem = _configReader.LastLaunchMode;
+                ListOfLaunchMode.SelectedItem = _launcherConfigReader.LastLaunchMode;
 
-                LabelVersion.Content = "Version: " + _configReader.Version;
-                var selectedGame = _configReader.Games.FirstOrDefault(x => x.Name == ListOfMods.SelectedValue);//.ToString());
+                LabelVersion.Content = "Version: " + _launcherConfigReader.Version;
+                var selectedGame = _launcherConfigReader.Games.FirstOrDefault(x => x.Name == _launcherConfigReader.LastLaunchGame);
                 if (selectedGame != null)
                 {
                     ModDescription.Text = selectedGame.Description;
@@ -51,13 +52,14 @@ namespace ExMachinaConversionLauncher
         {
             try
             {
-                var selectedGame = _configReader.Games.FirstOrDefault(x => x.Name == ListOfMods.SelectedValue);//.ToString());
-                if (selectedGame != null)
-                {
-                    ModDescription.Text = selectedGame.Description;
-                    var logo = new BitmapImage(new Uri(Directory.GetCurrentDirectory() + @"\LauncherConfig" + selectedGame.PicturePath));
-                    Image.Source = logo;
-                }
+                var selectedGameName = ListOfMods.SelectedValue != null ? ListOfMods.SelectedValue.ToString() : _launcherConfigReader.LastLaunchGame;
+                var selectedGame = _launcherConfigReader.Games.FirstOrDefault(x => x.Name == selectedGameName);
+
+                if (selectedGame == null) return;
+
+                ModDescription.Text = selectedGame.Description;
+                var logo = new BitmapImage(new Uri(Directory.GetCurrentDirectory() + @"\LauncherConfig" + selectedGame.PicturePath));
+                Image.Source = logo;
             }
             catch (Exception ex)
             {
@@ -69,70 +71,56 @@ namespace ExMachinaConversionLauncher
         {
             try
             {
-                PresentationSource source = PresentationSource.FromVisual(this);
+                var source = PresentationSource.FromVisual(this);
                 double scaleX = 1;
-                if (source != null)
+                if (source?.CompositionTarget != null)
                 {
                     scaleX = source.CompositionTarget.TransformToDevice.M11;
                 }
 
-                WriteConfig writeConfig = new WriteConfig(_errorHandler);
-                writeConfig.UpdateUiSchema2Hd(scaleX, _configReader.FontScaleParamsForHD);
+                var writeConfig = new WriteConfig(_errorHandler);
+                writeConfig.UpdateUiSchema2Hd(scaleX, _launcherConfigReader.FontScaleParamsForHd);
                 writeConfig.UpdateLauncherConfig(new Dictionary<string, string>() { { "lastLaunchGame", (string)ListOfMods.SelectedItem }, { "lastLaunchMode", (string)ListOfLaunchMode.SelectedItem } });
-                writeConfig.WriteConfigBySelectionGame(ListOfMods.SelectedValue.ToString(), _configReader.Games.Select(x => x.Name).ToArray(), _configReader.ListBaseConfigDictionary);
 
-                var hdMode = _configReader.LastLaunchHdMode;
+                var selectedGameName = ListOfMods.SelectedValue != null ? ListOfMods.SelectedValue.ToString() : _launcherConfigReader.LastLaunchGame;
+                var selectedGame = _launcherConfigReader.Games.FirstOrDefault(x => x.Name == selectedGameName);
 
-                switch (hdMode)
-                {
-                    case "WithOutHD":
-                        writeConfig.WriteConfigBySelectionGame(ListOfMods.SelectedValue.ToString(), _configReader.Games.Select(x => x.Name).ToArray(), _configReader.ListWithOutHdConfigDictionary);
-                        break;
-                    case "WithHDWithDefaultSight":
-                        writeConfig.WriteConfigBySelectionGame(ListOfMods.SelectedValue.ToString(), _configReader.Games.Select(x => x.Name).ToArray(), _configReader.ListWithHdWithDefaultSightConfigDictionary);
-                        break;
-                    case "WithHDWithSmallSight":
-                        writeConfig.WriteConfigBySelectionGame(ListOfMods.SelectedValue.ToString(), _configReader.Games.Select(x => x.Name).ToArray(), _configReader.ListWithHdWithSmallSightConfigDictionary);
-                        break;
-                    case "WithHDWithHardcoreSight":
-                        writeConfig.WriteConfigBySelectionGame(ListOfMods.SelectedValue.ToString(), _configReader.Games.Select(x => x.Name).ToArray(), _configReader.ListWithHdWithHardcoreSightConfigDictionary);
-                        break;
-                    case "WithHDWithOvalSight":
-                        writeConfig.WriteConfigBySelectionGame(ListOfMods.SelectedValue.ToString(), _configReader.Games.Select(x => x.Name).ToArray(), _configReader.ListWithHdWithOvalSightConfigDictionary);
-                        break;
-                }
+                var hdMode = _launcherConfigReader.LastLaunchHdMode;
+                writeConfig.WriteConfigBySelectionGame(selectedGame, hdMode);
 
-                var fullScreenList = new List<Dictionary<string, string>>();
-                for (var i = 0; i < _configReader.Games.Count; i++)
-                {
-                    fullScreenList.Add(new Dictionary<string, string>() {{"r_fullScreen", _configReader.FullScreen}});
-                }
-                writeConfig.WriteConfigBySelectionGame(ListOfMods.SelectedValue.ToString(), _configReader.Games.Select(x => x.Name).ToArray(), fullScreenList);
+                var fullScreenParams = new List<GameConfigParameterModel>
+                    {new GameConfigParameterModel("r_fullScreen", _launcherConfigReader.FullScreen)};
+                
+                writeConfig.UpdateGameConfigWithParameters(fullScreenParams);
 
-                string parametr = string.Empty;
-                string console = string.Empty;
+                var parameter = string.Empty;
+                var console = string.Empty;
 
                 if (ListOfLaunchMode.SelectedIndex == 0)
                 {
-                    parametr = " /LOW /NODE 0 /AFFINITY 0x1";
+                    parameter = " /LOW /NODE 0 /AFFINITY 0x1";
                 }
                 else if(ListOfLaunchMode.SelectedIndex == 1)
                 {
-                    parametr = " /AFFINITY 0x2";
+                    parameter = " /AFFINITY 0x2";
                 }
 
-                if (_configReader.Console)
+                if (_launcherConfigReader.Console)
                 {
                     console = "-console";
                 }
 
-                string command = String.Format("{0} {1} {2} {3}", "/C start", parametr,
-                    "\"Ex Machina\" " + _configReader.ExeName, console);
-                Process cmd = new Process();
-                cmd.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
-                cmd.StartInfo.FileName = "cmd.exe";
-                cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                cmd.StartInfo.Arguments = command;
+                var command = $"{"/C start"} {parameter} {"\"Ex Machina\" " + _launcherConfigReader.ExeName} {console}";
+                var cmd = new Process
+                {
+                    StartInfo =
+                    {
+                        WorkingDirectory = Directory.GetCurrentDirectory(),
+                        FileName = "cmd.exe",
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        Arguments = command
+                    }
+                };
                 cmd.Start();
                 this.Close();
 
@@ -185,7 +173,7 @@ namespace ExMachinaConversionLauncher
         {
             try
             {
-                var settingsWindow = new Settings(_configReader, _errorHandler);
+                var settingsWindow = new Settings(_errorHandler);
                 settingsWindow.ShowDialog();
             }
             catch (Exception ex)

@@ -6,7 +6,7 @@ using System.Xml;
 
 namespace ExMachinaConversionLauncher.Services
 {
-    class AdvancedGraphicSettingsService
+    internal class AdvancedGraphicSettingsService
     {
         private readonly ErrorHandler _errorHandler;
         private readonly string _uri;
@@ -21,16 +21,20 @@ namespace ExMachinaConversionLauncher.Services
         {
             try
             {
-                XmlDataDocument xmldoc = new XmlDataDocument();
+                var xmlDoc = new XmlDataDocument();
                 var fs = new FileStream(_uri, FileMode.Open, FileAccess.Read);
-                xmldoc.Load(fs);
-                var xmlnode = xmldoc.GetElementsByTagName("Parametr");
+                xmlDoc.Load(fs);
+                var xmlNode = xmlDoc.GetElementsByTagName("Parametr");
                 var advancedGraphicSettingsModels = new List<AdvancedGraphicSettingModel>();
-                for (var i = 0; i <= xmlnode.Count - 1; i++)
+
+                for (var i = 0; i <= xmlNode.Count - 1; i++)
                 {
-                    var name = xmlnode[i].Attributes["Name"];
-                    var advancedValue = xmlnode[i].Attributes["AdvancedValue"];
-                    var defaultValue = xmlnode[i].Attributes["DefaultValue"];
+                    var xmlAttributeCollection = xmlNode[i].Attributes;
+                    if (xmlAttributeCollection == null) continue;
+
+                    var name = xmlAttributeCollection["Name"];
+                    var advancedValue = xmlAttributeCollection["AdvancedValue"];
+                    var defaultValue = xmlAttributeCollection["DefaultValue"];
                     if (name != null && !string.IsNullOrEmpty(name.Value) &&
                         advancedValue != null && !string.IsNullOrEmpty(advancedValue.Value) &&
                         defaultValue != null && !string.IsNullOrEmpty(defaultValue.Value))

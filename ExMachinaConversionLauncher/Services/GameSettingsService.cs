@@ -43,12 +43,10 @@ namespace ExMachinaConversionLauncher.Services
         internal int ProjectorsFarDist { get; set; }
 
         private readonly ErrorHandler _errorHandler;
-        private readonly ToolsService _toolsService;
 
         public GameSettingsService(ErrorHandler errorHandler)
         {
             _errorHandler = errorHandler;
-            _toolsService = new ToolsService();
         }
 
 
@@ -85,7 +83,7 @@ namespace ExMachinaConversionLauncher.Services
                             break;
                         case "dsShadows":
                             value = GetValue(line);
-                            DsShadows = _toolsService.BooleanValue(value);
+                            DsShadows = ToolsService.BooleanValue(value);
                             break;
                         case "detShadowTexSz":
                             value = GetValue(line);
@@ -145,11 +143,11 @@ namespace ExMachinaConversionLauncher.Services
                             break;
                         case "autoPlayVideo":
                             value = GetValue(line);
-                            AutoPlayVideo = _toolsService.BooleanValue(value);
+                            AutoPlayVideo = ToolsService.BooleanValue(value);
                             break;
                         case "DoNotLoadMainmenuLevel":
                             value = GetValue(line);
-                            DoNotLoadMainmenuLevel = _toolsService.BooleanValue(value);
+                            DoNotLoadMainmenuLevel = ToolsService.BooleanValue(value);
                             break;
                         case "camSpeed":
                             value = GetValue(line);
@@ -161,7 +159,7 @@ namespace ExMachinaConversionLauncher.Services
                             break;
                         case "g_switchCameraAllow":
                             value = GetValue(line);
-                            SwitchCameraAllow = _toolsService.BooleanValue(value);
+                            SwitchCameraAllow = ToolsService.BooleanValue(value);
                             break;
                     }
                 }
@@ -204,11 +202,11 @@ namespace ExMachinaConversionLauncher.Services
             }
         }
 
-        internal Dictionary<string, string> PrepareSettingsParametrs()
+        internal Dictionary<string, string> PrepareSettingsParameters()
         {
             try
             {
-                var settingsParametrs = new Dictionary<string, string>()
+                var settingsParameters = new Dictionary<string, string>()
                 {
                     {"lsViewDistanceDivider",String.Format(CultureInfo.InvariantCulture, "{0:N2}", LsViewDistanceDivider)},
                     {"r_multiSamplesNum",Convert.ToString(MultiSamplesNum, CultureInfo.InvariantCulture)},
@@ -236,23 +234,23 @@ namespace ExMachinaConversionLauncher.Services
                     {"g_projectorsFarDist",Convert.ToString(ProjectorsFarDist, CultureInfo.InvariantCulture)},
                     {"g_switchCameraAllow",Convert.ToString(SwitchCameraAllow, CultureInfo.InvariantCulture).ToLower()}
                 };
-                return settingsParametrs;
+                return settingsParameters;
             }
             catch (Exception ex)
             {
-                _errorHandler.CallErrorWindows(ex, "PrepareSettingsParametrs");
+                _errorHandler.CallErrorWindows(ex, "PrepareSettingsParameters");
                 return new Dictionary<string, string>();
             }
         }
 
 
-        internal void SaveSettingsToConfig(Dictionary<string, string> settingsParametrs)
+        internal void SaveSettingsToConfig(Dictionary<string, string> settingsParameters)
         {
             try
             {
                 var gameConfig = File.ReadAllText(Directory.GetCurrentDirectory() + @"\data\config.cfg");
 
-                foreach (var settingsParametr in settingsParametrs)
+                foreach (var settingsParametr in settingsParameters)
                 {
                     var startIndex = gameConfig.IndexOf(settingsParametr.Key, StringComparison.InvariantCulture) + settingsParametr.Key.Length + 2;
                     var endIndex = gameConfig.IndexOf("\"", startIndex, StringComparison.InvariantCulture);

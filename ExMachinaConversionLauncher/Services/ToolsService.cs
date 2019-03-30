@@ -1,8 +1,8 @@
 ﻿namespace ExMachinaConversionLauncher.Services
 {
-    class ToolsService
+    static class ToolsService
     {
-        internal bool BooleanValue(string value)
+        internal static bool BooleanValue(string value)
         {
             switch (value.ToLower())
             {

@@ -17,64 +17,105 @@ namespace ExMachinaConversionLauncher.Services
         {
             _errorHandler = errorHandler;
         }
-        internal void WriteConfigBySelectionGame(string gameName, string[] games, List<Dictionary<string, string>> listParametrsDictionary)
+
+        internal void UpdateGameConfigWithParameters(IEnumerable<GameConfigParameterModel> parameters)
         {
-            var index = Array.IndexOf(games, gameName);
+            var gameConfig = File.ReadAllText(Directory.GetCurrentDirectory() + @"\data\config.cfg");
+            foreach (var parameter in parameters)
+            {
+                var begin = gameConfig.IndexOf(parameter.Name, StringComparison.InvariantCulture);
+                var end = gameConfig.IndexOf("\"", begin + parameter.Name.Length + 2, StringComparison.InvariantCulture);
+
+                var gameConfigStringBuilder = new StringBuilder(gameConfig);
+                gameConfigStringBuilder.Remove(begin, end - begin + 1);
+                gameConfigStringBuilder.Insert(begin,
+                    $"{parameter.Name}=\"{parameter.Value}\"");
+                gameConfig = gameConfigStringBuilder.ToString();
+            }
+            File.WriteAllText(Directory.GetCurrentDirectory() + @"\data\config.cfg", gameConfig);
+        }
+
+        internal void WriteConfigBySelectionGame(GameModel game, string hdMode)
+        {
             try
             {
-                var gameConfig = File.ReadAllText(Directory.GetCurrentDirectory() + @"\data\config.cfg");
-                foreach (var configString in listParametrsDictionary[index])
+                List<GameConfigParameterModel> uiParameters;
+                switch (hdMode)
                 {
-                    int begin, end;
-                    begin = gameConfig.IndexOf(configString.Key, StringComparison.InvariantCulture);
-                    end = gameConfig.IndexOf("\"", begin + configString.Key.Length + 2, StringComparison.InvariantCulture);
-
-                    var gameConfigStringBuilder = new StringBuilder(gameConfig);
-                    gameConfigStringBuilder.Remove(begin, end - begin + 1);
-                    gameConfigStringBuilder.Insert(begin,
-                        String.Format("{0}=\"{1}\"", configString.Key, configString.Value));
-                    gameConfig = gameConfigStringBuilder.ToString();
+                    case "WithHDWithDefaultSight":
+                    case "WithHDWithSmallSight":
+                    case "WithHDWithHardcoreSight":
+                    case "WithHDWithOvalSight":
+                        uiParameters = game.GameConfigs.UiParameters.FirstOrDefault(x => x.Name == hdMode)?.UiParameters;
+                        break;
+                    default:
+                        uiParameters = game.GameConfigs.UiParameters.FirstOrDefault(x=>x.Name == "WithOutHD")?.UiParameters;
+                        break;
                 }
-                File.WriteAllText(Directory.GetCurrentDirectory() + @"\data\config.cfg", gameConfig);
+
+
+                var generalParameters = game.GameConfigs.GeneralParameters;
+                var mergedParameters = generalParameters.Concat(uiParameters ?? throw new InvalidOperationException());
+                UpdateGameConfigWithParameters(mergedParameters);
             }
             catch (Exception ex)
             {
                 _errorHandler.CallErrorWindows(ex, "WriteConfigBySelectionGame");
             }
-
         }
 
         internal void UpdateLauncherConfig(Dictionary<string, string> keyValuePairs)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(Directory.GetCurrentDirectory() + @"\LauncherConfig\Launcher.config");
-
-
-            foreach (var keyValuePair in keyValuePairs)
+            try
             {
-                var nodes = doc.SelectNodes(String.Format("/Configuration/OtherParams/Value[@Name=\"{0}\"]", keyValuePair.Key));
-                foreach (XmlElement n in nodes)
+                var doc = new XmlDocument();
+                doc.Load(Directory.GetCurrentDirectory() + @"\LauncherConfig\Launcher.config");
+
+                foreach (var keyValuePair in keyValuePairs)
                 {
-                    n.SetAttribute("Value", keyValuePair.Value);
+                    var nodes = doc.SelectNodes($"/Configuration/OtherParams/Value[@Name=\"{keyValuePair.Key}\"]");
+                    if (nodes == null || nodes.Count == 0)
+                    {
+                        throw new Exception($"Launcher.config is corrupted. /Configuration/OtherParams/Value[@Name=\"{keyValuePair.Key}\"] was not found.");
+                    }
+                    foreach (XmlElement n in nodes)
+                    {
+                        n.SetAttribute("Value", keyValuePair.Value);
+                    }
+                }
+
+
+                var settings = new XmlWriterSettings
+                {
+                    OmitXmlDeclaration = true,
+                    Indent = true,
+                    NewLineOnAttributes = true,
+                    NewLineHandling = NewLineHandling.None
+                };
+                using (var writer = XmlWriter.Create(Directory.GetCurrentDirectory() + @"\LauncherConfig\Launcher.config", settings))
+                {
+                    doc.Save(writer);
                 }
             }
-
-            doc.Save(Directory.GetCurrentDirectory() + @"\LauncherConfig\Launcher.config");
+            catch (Exception ex)
+            {
+                _errorHandler.CallErrorWindows(ex, "UpdateUiSchema2Hd");
+            }
         }
 
         internal void UpdateUiSchema2Hd(double scaleValue, List<FontScaleParamForHdModel> paramsArray)
         {
             try
             {
-                var fontScaleParamForHdModel = paramsArray.FirstOrDefault(x=>x.ScaleFactor == scaleValue);
-                var wndFontSize = fontScaleParamForHdModel != null ? fontScaleParamForHdModel.WndFontSize : 7;
-                var micAndTooltipFontSize = fontScaleParamForHdModel != null ? fontScaleParamForHdModel.MicAndTooltipFontSize : 8;
+                var fontScaleParamForHdModel = paramsArray.FirstOrDefault(x => Math.Abs(x.ScaleFactor - scaleValue) < 0.01);
+                var wndFontSize = fontScaleParamForHdModel?.WndFontSize ?? 7;
+                var micAndTooltipFontSize = fontScaleParamForHdModel?.MicAndTooltipFontSize ?? 8;
 
-                var uischema2_hd = File.ReadAllText(Directory.GetCurrentDirectory() + @"\data\if\frames\uischema2_hd.xml");
-                uischema2_hd = Regex.Replace(uischema2_hd, "wndFontSize=\"(\\d*)\"", $"wndFontSize=\"{wndFontSize}\"");
-                uischema2_hd = Regex.Replace(uischema2_hd, "tooltipFontSize=\"(\\d*)\"", $"tooltipFontSize=\"{micAndTooltipFontSize}\"");
-                uischema2_hd = Regex.Replace(uischema2_hd, "miscFontSize=\"(\\d*)\"", $"miscFontSize=\"{micAndTooltipFontSize}\"");
-                File.WriteAllText(Directory.GetCurrentDirectory() + @"\data\if\frames\uischema2_hd.xml", uischema2_hd);
+                var uischema2Hd = File.ReadAllText(Directory.GetCurrentDirectory() + @"\data\if\frames\uischema2_hd.xml");
+                uischema2Hd = Regex.Replace(uischema2Hd, "wndFontSize=\"(\\d*)\"", $"wndFontSize=\"{wndFontSize}\"");
+                uischema2Hd = Regex.Replace(uischema2Hd, "tooltipFontSize=\"(\\d*)\"", $"tooltipFontSize=\"{micAndTooltipFontSize}\"");
+                uischema2Hd = Regex.Replace(uischema2Hd, "miscFontSize=\"(\\d*)\"", $"miscFontSize=\"{micAndTooltipFontSize}\"");
+                File.WriteAllText(Directory.GetCurrentDirectory() + @"\data\if\frames\uischema2_hd.xml", uischema2Hd);
             }
             catch (Exception ex)
             {
