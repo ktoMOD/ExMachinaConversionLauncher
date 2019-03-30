@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows;
+using System.Xml;
 
 namespace ExMachinaConversionLauncher.Services
 {
@@ -42,6 +41,7 @@ namespace ExMachinaConversionLauncher.Services
         internal int CamSpeed { get; set; }
         internal int ProjectorsFarDist { get; set; }
 
+        private readonly string _pathToMainDirectory = ((App)Application.Current).PathToMainDirectory;
         private readonly ErrorHandler _errorHandler;
 
         public GameSettingsService(ErrorHandler errorHandler)
@@ -54,151 +54,52 @@ namespace ExMachinaConversionLauncher.Services
         {
             try
             {
-                var gameConfig = File.ReadAllLines(Directory.GetCurrentDirectory() + @"\data\config.cfg");
-                foreach (var line in gameConfig)
+                using (var xmlFile = new FileStream($@"{_pathToMainDirectory}\data\config.cfg", FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
+                    var xDoc = new XmlDocument();
+                    xDoc.Load(xmlFile);
 
-                    string value;
-                    switch (GetKey(line))
+
+                    var xmlNode = xDoc.GetElementsByTagName("config");
+                    if (xmlNode.Count == 0)
                     {
-                        case "lsViewDistanceDivider":
-                            value = GetValue(line);
-                            LsViewDistanceDivider = Convert.ToDouble(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "r_multiSamplesNum":
-                            value = GetValue(line);
-                            MultiSamplesNum = Convert.ToInt32(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "g_postEffectBloom":
-                            value = GetValue(line);
-                            PostEffectBloom = Convert.ToInt32(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "g_texturesFilter":
-                            value = GetValue(line);
-                            TexturesFilter = Convert.ToInt32(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "shaderMacro1":
-                            value = GetValue(line);
-                            ShaderMacro1 = value;
-                            break;
-                        case "dsShadows":
-                            value = GetValue(line);
-                            DsShadows = ToolsService.BooleanValue(value);
-                            break;
-                        case "detShadowTexSz":
-                            value = GetValue(line);
-                            DetShadowTexSz = Convert.ToInt32(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "g_shadowBlurCoeff":
-                            value = GetValue(line);
-                            ShadowBlurCoeff = Convert.ToDouble(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "lgtShadowTexSz":
-                            value = GetValue(line);
-                            LgtShadowTexSz = Convert.ToInt32(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "g_grassDrawDist":
-                            value = GetValue(line);
-                            GrassDrawDist = Convert.ToDouble(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "r_waterQuality":
-                            value = GetValue(line);
-                            WaterQuality = Convert.ToInt32(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "gammaGamma":
-                            value = GetValue(line);
-                            Gamma = Convert.ToDouble(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "r_desiredHeight":
-                            value = GetValue(line);
-                            DesiredHeight = Convert.ToInt32(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "r_desiredWidth":
-                            value = GetValue(line);
-                            DesiredWidth = Convert.ToInt32(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "r_height":
-                            value = GetValue(line);
-                            Height = Convert.ToInt32(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "r_width":
-                            value = GetValue(line);
-                            Width = Convert.ToInt32(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "mus_Volume":
-                            value = GetValue(line);
-                            Volume = Convert.ToInt32(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "snd_2dVolume":
-                            value = GetValue(line);
-                            Volume2D = Convert.ToInt32(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "snd_3dVolume":
-                            value = GetValue(line);
-                            Volume3D = Convert.ToInt32(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "fov":
-                            value = GetValue(line);
-                            Fov = Convert.ToDouble(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "autoPlayVideo":
-                            value = GetValue(line);
-                            AutoPlayVideo = ToolsService.BooleanValue(value);
-                            break;
-                        case "DoNotLoadMainmenuLevel":
-                            value = GetValue(line);
-                            DoNotLoadMainmenuLevel = ToolsService.BooleanValue(value);
-                            break;
-                        case "camSpeed":
-                            value = GetValue(line);
-                            CamSpeed = Convert.ToInt32(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "g_projectorsFarDist":
-                            value = GetValue(line);
-                            ProjectorsFarDist = Convert.ToInt32(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "g_switchCameraAllow":
-                            value = GetValue(line);
-                            SwitchCameraAllow = ToolsService.BooleanValue(value);
-                            break;
+                        throw new Exception("Launcher.config tag <config> could not be empty.");
                     }
+
+                    var xmlAttributeCollection = xmlNode[0].Attributes;
+
+                    if (xmlAttributeCollection == null) return;
+
+                    LsViewDistanceDivider = Convert.ToDouble(xmlAttributeCollection["lsViewDistanceDivider"].Value);
+                    MultiSamplesNum = Convert.ToInt32(xmlAttributeCollection["r_multiSamplesNum"].Value);
+                    PostEffectBloom = Convert.ToInt32(xmlAttributeCollection["g_postEffectBloom"].Value);
+                    TexturesFilter = Convert.ToInt32(xmlAttributeCollection["g_texturesFilter"].Value);
+                    ShaderMacro1 = xmlAttributeCollection["shaderMacro1"].Value;
+                    DsShadows = Convert.ToBoolean(xmlAttributeCollection["dsShadows"].Value);
+                    DetShadowTexSz = Convert.ToInt32(xmlAttributeCollection["detShadowTexSz"].Value);
+                    ShadowBlurCoeff = Convert.ToDouble(xmlAttributeCollection["g_shadowBlurCoeff"].Value);
+                    LgtShadowTexSz = Convert.ToInt32(xmlAttributeCollection["lgtShadowTexSz"].Value);
+                    GrassDrawDist = Convert.ToDouble(xmlAttributeCollection["g_grassDrawDist"].Value);
+                    WaterQuality = Convert.ToInt32(xmlAttributeCollection["r_waterQuality"].Value);
+                    Gamma = Convert.ToDouble(xmlAttributeCollection["gammaGamma"].Value);
+                    DesiredHeight = Convert.ToInt32(xmlAttributeCollection["r_desiredHeight"].Value);
+                    DesiredWidth = Convert.ToInt32(xmlAttributeCollection["r_desiredWidth"].Value);
+                    Height = Convert.ToInt32(xmlAttributeCollection["r_height"].Value);
+                    Width = Convert.ToInt32(xmlAttributeCollection["r_width"].Value);
+                    Volume = Convert.ToInt32(xmlAttributeCollection["mus_Volume"].Value);
+                    Volume2D = Convert.ToInt32(xmlAttributeCollection["snd_2dVolume"].Value);
+                    Volume3D = Convert.ToInt32(xmlAttributeCollection["snd_3dVolume"].Value);
+                    Fov = Convert.ToDouble(xmlAttributeCollection["fov"].Value);
+                    AutoPlayVideo = Convert.ToBoolean(xmlAttributeCollection["autoPlayVideo"].Value);
+                    DoNotLoadMainmenuLevel = Convert.ToBoolean(xmlAttributeCollection["DoNotLoadMainmenuLevel"].Value);
+                    CamSpeed = Convert.ToInt32(xmlAttributeCollection["camSpeed"].Value);
+                    ProjectorsFarDist = Convert.ToInt32(xmlAttributeCollection["g_projectorsFarDist"].Value);
+                    SwitchCameraAllow = Convert.ToBoolean(xmlAttributeCollection["g_switchCameraAllow"].Value);
                 }
             }
             catch (Exception ex)
             {
                 _errorHandler.CallErrorWindows(ex, "GetDataFromFile");
-            }
-        }
-
-        private string GetKey(string line)
-        {
-            try
-            {
-                line = line.Trim('\t');
-                var equally = line.IndexOf("=\"", StringComparison.InvariantCulture);
-                return equally > 0 ? line.Substring(0, equally) : string.Empty;
-            }
-            catch (Exception ex)
-            {
-                _errorHandler.CallErrorWindows(ex, "GetKey");
-                return null;
-            }
-        }
-
-        private string GetValue(string line)
-        {
-            try
-            {
-                var equally = line.IndexOf("=\"", StringComparison.InvariantCulture);
-                var firstQuote = line.IndexOf("\"", StringComparison.InvariantCulture);
-                var lastQuote = line.IndexOf("\"", equally + 2, StringComparison.InvariantCulture);
-                var value = line.Substring(firstQuote + 1, lastQuote - firstQuote - 1);
-                return value;
-            }
-            catch (Exception ex)
-            {
-                _errorHandler.CallErrorWindows(ex, "GetValue");
-                return null;
             }
         }
 
@@ -242,31 +143,5 @@ namespace ExMachinaConversionLauncher.Services
                 return new Dictionary<string, string>();
             }
         }
-
-
-        internal void SaveSettingsToConfig(Dictionary<string, string> settingsParameters)
-        {
-            try
-            {
-                var gameConfig = File.ReadAllText(Directory.GetCurrentDirectory() + @"\data\config.cfg");
-
-                foreach (var settingsParametr in settingsParameters)
-                {
-                    var startIndex = gameConfig.IndexOf(settingsParametr.Key, StringComparison.InvariantCulture) + settingsParametr.Key.Length + 2;
-                    var endIndex = gameConfig.IndexOf("\"", startIndex, StringComparison.InvariantCulture);
-
-                    var gameConfigStringBuilder = new StringBuilder(gameConfig);
-                    gameConfigStringBuilder.Remove(startIndex, endIndex - startIndex);
-                    gameConfigStringBuilder.Insert(startIndex, settingsParametr.Value);
-                    gameConfig = gameConfigStringBuilder.ToString();
-                }
-
-                File.WriteAllText(Directory.GetCurrentDirectory() + @"\data\config.cfg", gameConfig);
-            }
-            catch (Exception ex)
-            {
-                _errorHandler.CallErrorWindows(ex, "SaveSettingsToConfig");
-            }
-}
     }
 }

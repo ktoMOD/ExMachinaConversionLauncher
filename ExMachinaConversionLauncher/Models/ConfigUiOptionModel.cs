@@ -2,12 +2,12 @@
 
 namespace ExMachinaConversionLauncher.Models
 {
-    public class GameConfigUiOptionModel
+    public class ConfigUiOptionModel
     {
         internal string Name { get; set; }
-        internal List<GameConfigParameterModel> UiParameters { get; set; }
+        internal Dictionary<string, string> UiParameters { get; set; }
 
-        public GameConfigUiOptionModel(string name, List<GameConfigParameterModel> uiParameters)
+        public ConfigUiOptionModel(string name, Dictionary<string, string> uiParameters)
         {
             Name = name;
             UiParameters = uiParameters;

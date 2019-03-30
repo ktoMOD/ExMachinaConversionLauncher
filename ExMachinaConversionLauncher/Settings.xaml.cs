@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using ExMachinaConversionLauncher.Models;
 using ExMachinaConversionLauncher.Services;
 
@@ -23,6 +16,8 @@ namespace ExMachinaConversionLauncher
         private readonly GameSettingsService _gameSettings;
         private readonly AdvancedGraphicSettingsService _advancedGraphicSettingsService;
         private readonly List<AdvancedGraphicSettingModel> _advancedGraphicSettingsModels;
+        private readonly string _pathToMainDirectory = ((App)Application.Current).PathToMainDirectory;
+        private readonly SettingsService _settingsService = ((App)Application.Current).SettingsService;
         private readonly ErrorHandler _errorHandler;
 
         public Settings(ErrorHandler errorHandler)
@@ -31,13 +26,13 @@ namespace ExMachinaConversionLauncher
             try
             {
                 _gameSettings = new GameSettingsService(_errorHandler);
-                _launcherConfigReader = new LauncherConfigReader(Directory.GetCurrentDirectory() + @"\LauncherConfig\Launcher.config", _errorHandler);
+                _launcherConfigReader = new LauncherConfigReader($@"{_pathToMainDirectory}\LauncherConfig\Launcher.config", _errorHandler);
                 _launcherConfigReader.GetDataFromFile();
                 InitializeComponent();
                 _gameSettings.GetDataFromFile();
                 InitializeSettings();
 
-                _advancedGraphicSettingsService = new AdvancedGraphicSettingsService(Directory.GetCurrentDirectory() + @"\LauncherConfig\AdvancedGraphicSettings.config", _errorHandler);
+                _advancedGraphicSettingsService = new AdvancedGraphicSettingsService($@"{_pathToMainDirectory}\LauncherConfig\AdvancedGraphicSettings.config", _errorHandler);
                 _advancedGraphicSettingsModels = _advancedGraphicSettingsService.GetDataFromFile();
             }
             catch (Exception ex)
@@ -444,17 +439,8 @@ namespace ExMachinaConversionLauncher
                 _gameSettings.Volume3D = Convert.ToInt32(EffectVolumeSlider.Value);
                 _gameSettings.Volume2D = Convert.ToInt32(SpeakVolumeSlider.Value);
 
-                var settingsParameters = _gameSettings.PrepareSettingsParameters();
-                var advancedGraphicSettings = _advancedGraphicSettingsService.ConvertAdvancedGraphicSettingsListToDictionary(_advancedGraphicSettingsModels, AdvancedGraphicSettingsCheckBox.IsChecked.GetValueOrDefault());
 
-                var mergedSettings = new Dictionary<string, string>(advancedGraphicSettings);
-                foreach (var settingsParametr in settingsParameters)
-                {
-                    mergedSettings[settingsParametr.Key] = settingsParametr.Value;
-                }
-
-                _gameSettings.SaveSettingsToConfig(mergedSettings);
-
+                Dictionary<string, string> launcherParams;
                 if (HdCheckBox.IsChecked != null && (bool)HdCheckBox.IsChecked)
                 {
                     string sightQualityToConfig;
@@ -473,12 +459,35 @@ namespace ExMachinaConversionLauncher
                             sightQualityToConfig = "WithHDWithDefaultSight";
                             break;
                     }
-                    writeConfig.UpdateLauncherConfig(new Dictionary<string, string>() { { "launcherHDMode", sightQualityToConfig }, { "advancedGraphic", AdvancedGraphicSettingsCheckBox.IsChecked.ToString().ToLower() } });
+
+                    launcherParams = new Dictionary<string, string>
+                    {
+                        {"launcherHDMode", sightQualityToConfig},
+                        {"advancedGraphic", AdvancedGraphicSettingsCheckBox.IsChecked.ToString().ToLower()}
+                    };
                 }
                 else
                 {
-                    writeConfig.UpdateLauncherConfig(new Dictionary<string, string>() { { "launcherHDMode", "WithOutHD" }, { "advancedGraphic", AdvancedGraphicSettingsCheckBox.IsChecked.ToString().ToLower() } });
+                    launcherParams = new Dictionary<string, string>
+                    {
+                        {"launcherHDMode", "WithOutHD"},
+                        {"advancedGraphic", AdvancedGraphicSettingsCheckBox.IsChecked.ToString().ToLower()}
+                    };
                 }
+
+                //Fill part start
+                _settingsService.AddParamsToLauncherParams(launcherParams);
+
+                var settingsParameters = _gameSettings.PrepareSettingsParameters();
+                var advancedGraphicSettings = _advancedGraphicSettingsService.ConvertAdvancedGraphicSettingsListToDictionary(_advancedGraphicSettingsModels, AdvancedGraphicSettingsCheckBox.IsChecked.GetValueOrDefault());
+                var mergedSettings = ToolsService.ConcatTwoDictionariesWithoutDuplicates(advancedGraphicSettings, settingsParameters);
+                _settingsService.AddParamsToGameParams(mergedSettings);
+                //Fill part end
+
+                //Save part start
+                _settingsService.SaveGameParams();
+                _settingsService.SaveLauncherParams();
+                //Save part end
 
                 this.Close();
             }

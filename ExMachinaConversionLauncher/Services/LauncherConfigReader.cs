@@ -1,8 +1,10 @@
 ﻿using ExMachinaConversionLauncher.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.IO;
+using System.Windows;
 using System.Xml;
 
 namespace ExMachinaConversionLauncher.Services
@@ -23,6 +25,7 @@ namespace ExMachinaConversionLauncher.Services
         internal string LastLaunchHdMode { get; set; }
         private List<string> GeneralParameterNames { get; } = new List<string>();
         private List<string> UiParameterNames { get; } = new List<string>();
+        private readonly string _pathToMainDirectory = ((App)Application.Current).PathToMainDirectory;
         private readonly ErrorHandler _errorHandler;
 
 
@@ -32,11 +35,11 @@ namespace ExMachinaConversionLauncher.Services
             Uri = uri;
         }
 
-        public void GetGamesFromConfig(XmlDataDocument xmlDoc)
+        public void GetGamesFromConfig(XmlDocument xDoc)
         {
             try
             {
-                var xmlNode = xmlDoc.GetElementsByTagName("Games");
+                var xmlNode = xDoc.GetElementsByTagName("Games");
                 if (xmlNode.Count == 0)
                 {
                     throw new Exception("Launcher.config tag <Games> could not be empty.");
@@ -64,11 +67,11 @@ namespace ExMachinaConversionLauncher.Services
             }
         }
 
-        public void GetResolutionsFromConfig(XmlDataDocument xmlDoc)
+        public void GetResolutionsFromConfig(XmlDocument xDoc)
         {
             try
             {
-                var xmlNode = xmlDoc.GetElementsByTagName("Resolutions");
+                var xmlNode = xDoc.GetElementsByTagName("Resolutions");
                 if (xmlNode.Count == 0)
                 {
                     throw new Exception("Launcher.config tag <Resolutions> could not be empty.");
@@ -94,11 +97,11 @@ namespace ExMachinaConversionLauncher.Services
             }
         }
 
-        public void GetFontScaleParamsForHdFromConfig(XmlDataDocument xmlDoc)
+        public void GetFontScaleParamsForHdFromConfig(XmlDocument xDoc)
         {
             try
             {
-                var xmlNode = xmlDoc.GetElementsByTagName("FontScaleParamsForHD");
+                var xmlNode = xDoc.GetElementsByTagName("FontScaleParamsForHD");
                 if (xmlNode.Count == 0)
                 {
                     throw new Exception("Launcher.config tag <FontScaleParamsForHD> could not be empty.");
@@ -130,11 +133,11 @@ namespace ExMachinaConversionLauncher.Services
             }
         }
 
-        public void GetOtherParamsFromConfig(XmlDataDocument xmlDoc)
+        public void GetOtherParamsFromConfig(XmlDocument xDoc)
         {
             try
             {
-                var xmlNode = xmlDoc.GetElementsByTagName("OtherParams");
+                var xmlNode = xDoc.GetElementsByTagName("OtherParams");
                 if (xmlNode.Count == 0)
                 {
                     throw new Exception("Launcher.config tag <OtherParams> could not be empty.");
@@ -187,11 +190,11 @@ namespace ExMachinaConversionLauncher.Services
             }
         }
 
-        public void GetArrayOfParametersFromConfig(XmlDataDocument xmlDoc, string nodeName, List<string> parametersResultArray)
+        public void GetArrayOfParametersFromConfig(XmlDocument xDoc, string nodeName, List<string> parametersResultArray)
         {
             try
             {
-                var xmlNode = xmlDoc.GetElementsByTagName(nodeName);
+                var xmlNode = xDoc.GetElementsByTagName(nodeName);
                 if (xmlNode.Count == 0)
                 {
                     throw new Exception($"Launcher.config tag <{nodeName}> could not be empty.");
@@ -213,28 +216,49 @@ namespace ExMachinaConversionLauncher.Services
         {
             try
             {
-                var xmlDoc = new XmlDataDocument();
-                var fs = new FileStream(Uri, FileMode.Open, FileAccess.Read);
-                xmlDoc.Load(fs);
+                using (var xmlFile = new FileStream(Uri, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    var xDoc = new XmlDocument();
+                    xDoc.Load(xmlFile);
 
-                GetGamesFromConfig(xmlDoc);
-                GetResolutionsFromConfig(xmlDoc);
-                GetFontScaleParamsForHdFromConfig(xmlDoc);
-                GetOtherParamsFromConfig(xmlDoc);
-                GetArrayOfParametersFromConfig(xmlDoc, "GeneralParameters", GeneralParameterNames);
-                GetArrayOfParametersFromConfig(xmlDoc, "UiParameters", UiParameterNames);
-
+                    GetGamesFromConfig(xDoc);
+                    GetResolutionsFromConfig(xDoc);
+                    GetFontScaleParamsForHdFromConfig(xDoc);
+                    GetOtherParamsFromConfig(xDoc);
+                    GetArrayOfParametersFromConfig(xDoc, "GeneralParameters", GeneralParameterNames);
+                    GetArrayOfParametersFromConfig(xDoc, "UiParameters", UiParameterNames);
+                }
                 var gameConfigsReader = new GameConfigsReader(_errorHandler, GeneralParameterNames, UiParameterNames);
 
                 foreach (var game in Games)
                 {
-                    var pathToFile = Directory.GetCurrentDirectory() + @"\LauncherConfig\" + game.ConfigPath;
+                    var pathToFile = $@"{_pathToMainDirectory}\LauncherConfig\" + game.ConfigPath;
                     game.GameConfigs = gameConfigsReader.GetGameConfigs(pathToFile);
                 }
             }
             catch (Exception ex)
             {
                 _errorHandler.CallErrorWindows(ex, "LauncherConfigReader > GetDataFromFile");
+            }
+        }
+
+        public void RefreshOtherParamsFromConfig()
+        {
+            try
+            {
+                using (var src = new DataSet())
+                {
+                    src.ReadXml(Uri);
+
+                    var xDoc = new XmlDocument();
+                    xDoc.LoadXml(src.GetXml());
+
+                    GetOtherParamsFromConfig(xDoc);
+                }
+            }
+            catch (Exception ex)
+            {
+                _errorHandler.CallErrorWindows(ex, "LauncherConfigReader > RefreshOtherParamsFromConfig");
             }
         }
     }

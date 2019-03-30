@@ -20,17 +20,19 @@ namespace ExMachinaConversionLauncher.Services
             UiParameterNames = uiParameterNames;
         }
 
-        private XmlDataDocument GetXmlDoc(string uri)
+        public XmlDocument GetXmlDoc(string uri)
         {
-            var xmlDoc = new XmlDataDocument();
-            var fs = new FileStream(uri, FileMode.Open, FileAccess.Read);
-            xmlDoc.Load(fs);
-            return xmlDoc;
+            using (var xmlFile = new FileStream(uri, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                var xDoc = new XmlDocument();
+                xDoc.Load(xmlFile);
+                return xDoc;
+            }
         }
 
-        private List<GameConfigParameterModel> GetParameters(XmlDocument xmlDoc, string parameterName)
+        private Dictionary<string, string> GetParameters(XmlDocument xmlDoc, string parameterName)
         {
-            var result = new List<GameConfigParameterModel>();
+            var result = new Dictionary<string, string>();
 
             var launcherConfigSectionName = "GeneralParameters";
             var validationArray = GeneralParameterNames;
@@ -60,7 +62,7 @@ namespace ExMachinaConversionLauncher.Services
                         validationArray.Contains(name.Value) &&
                         value != null && !string.IsNullOrEmpty(value.Value))
                     {
-                        result.Add(new GameConfigParameterModel(name.Value, value.Value));
+                        result.Add(name.Value, value.Value);
                     }
                 }
 
@@ -77,23 +79,23 @@ namespace ExMachinaConversionLauncher.Services
             }
         }
 
-        internal GameConfigsModel GetGameConfigs(string uri)
+        internal ConfigsModel GetGameConfigs(string uri)
         {
             try
             {
                 var xmlDoc = GetXmlDoc(uri);
 
                 var generalParameters = GetParameters(xmlDoc, "GeneralParameters");
-                var uiParameters = new List<GameConfigUiOptionModel>()
+                var uiParameters = new List<ConfigUiOptionModel>()
                 {
-                    new GameConfigUiOptionModel("WithOutHD", GetParameters(xmlDoc, "WithOutHD")),
-                    new GameConfigUiOptionModel("WithHDWithDefaultSight", GetParameters(xmlDoc, "WithHDWithDefaultSight")),
-                    new GameConfigUiOptionModel("WithHDWithSmallSight", GetParameters(xmlDoc, "WithHDWithSmallSight")),
-                    new GameConfigUiOptionModel("WithHDWithOvalSight", GetParameters(xmlDoc, "WithHDWithOvalSight")),
-                    new GameConfigUiOptionModel("WithHDWithHardcoreSight", GetParameters(xmlDoc, "WithHDWithHardcoreSight"))
+                    new ConfigUiOptionModel("WithOutHD", GetParameters(xmlDoc, "WithOutHD")),
+                    new ConfigUiOptionModel("WithHDWithDefaultSight", GetParameters(xmlDoc, "WithHDWithDefaultSight")),
+                    new ConfigUiOptionModel("WithHDWithSmallSight", GetParameters(xmlDoc, "WithHDWithSmallSight")),
+                    new ConfigUiOptionModel("WithHDWithOvalSight", GetParameters(xmlDoc, "WithHDWithOvalSight")),
+                    new ConfigUiOptionModel("WithHDWithHardcoreSight", GetParameters(xmlDoc, "WithHDWithHardcoreSight"))
             };
 
-                return new GameConfigsModel(generalParameters, uiParameters);
+                return new ConfigsModel(generalParameters, uiParameters);
             }
             catch (Exception ex)
             {

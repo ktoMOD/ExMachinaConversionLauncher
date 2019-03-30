@@ -21,25 +21,28 @@ namespace ExMachinaConversionLauncher.Services
         {
             try
             {
-                var xmlDoc = new XmlDataDocument();
-                var fs = new FileStream(_uri, FileMode.Open, FileAccess.Read);
-                xmlDoc.Load(fs);
-                var xmlNode = xmlDoc.GetElementsByTagName("Parametr");
                 var advancedGraphicSettingsModels = new List<AdvancedGraphicSettingModel>();
-
-                for (var i = 0; i <= xmlNode.Count - 1; i++)
+                using (var xmlFile = new FileStream(_uri, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    var xmlAttributeCollection = xmlNode[i].Attributes;
-                    if (xmlAttributeCollection == null) continue;
+                    var xDoc = new XmlDocument();
+                    xDoc.Load(xmlFile);
 
-                    var name = xmlAttributeCollection["Name"];
-                    var advancedValue = xmlAttributeCollection["AdvancedValue"];
-                    var defaultValue = xmlAttributeCollection["DefaultValue"];
-                    if (name != null && !string.IsNullOrEmpty(name.Value) &&
-                        advancedValue != null && !string.IsNullOrEmpty(advancedValue.Value) &&
-                        defaultValue != null && !string.IsNullOrEmpty(defaultValue.Value))
+                    var xmlNode = xDoc.GetElementsByTagName("Parametr");
+
+                    for (var i = 0; i <= xmlNode.Count - 1; i++)
                     {
-                        advancedGraphicSettingsModels.Add(new AdvancedGraphicSettingModel(name.Value, advancedValue.Value, defaultValue.Value));
+                        var xmlAttributeCollection = xmlNode[i].Attributes;
+                        if (xmlAttributeCollection == null) continue;
+
+                        var name = xmlAttributeCollection["Name"];
+                        var advancedValue = xmlAttributeCollection["AdvancedValue"];
+                        var defaultValue = xmlAttributeCollection["DefaultValue"];
+                        if (name != null && !string.IsNullOrEmpty(name.Value) &&
+                            advancedValue != null && !string.IsNullOrEmpty(advancedValue.Value) &&
+                            defaultValue != null && !string.IsNullOrEmpty(defaultValue.Value))
+                        {
+                            advancedGraphicSettingsModels.Add(new AdvancedGraphicSettingModel(name.Value, advancedValue.Value, defaultValue.Value));
+                        }
                     }
                 }
                 return advancedGraphicSettingsModels;
@@ -61,7 +64,7 @@ namespace ExMachinaConversionLauncher.Services
                     result.Add(advancedGraphicSettingsModel.Name, advancedGraphicEnable ? advancedGraphicSettingsModel.AdvancedValue : advancedGraphicSettingsModel.DefaultValue);
                 }
                 return result;
-              }
+            }
             catch (Exception ex)
             {
                 _errorHandler.CallErrorWindows(ex, "AdvancedGraphicSettingsModel > ConvertAdvancedGraphicSettingsListToDictionary");
