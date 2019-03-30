@@ -8,8 +8,8 @@ namespace ExMachinaConversionLauncher.Services
 {
     public class GameConfigsReader
     {
-        internal List<string> GeneralParameterNames { get; set; }
-        internal List<string> UiParameterNames { get; set; }
+        public List<string> GeneralParameterNames { get; set; }
+        public List<string> UiParameterNames { get; set; }
         private readonly ErrorHandler _errorHandler;
 
 
@@ -79,7 +79,7 @@ namespace ExMachinaConversionLauncher.Services
             }
         }
 
-        internal ConfigsModel GetGameConfigs(string uri)
+        public ConfigsModel GetGameConfigs(string uri)
         {
             try
             {

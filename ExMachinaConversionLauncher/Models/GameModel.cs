@@ -1,12 +1,12 @@
 ﻿namespace ExMachinaConversionLauncher.Models
 {
-    internal class GameModel
+    public class GameModel
     {
-        internal readonly string Name;
-        internal readonly string Description;
-        internal readonly string PicturePath;
-        internal readonly string ConfigPath;
-        internal ConfigsModel GameConfigs { get; set; }
+        public readonly string Name;
+        public readonly string Description;
+        public readonly string PicturePath;
+        public readonly string ConfigPath;
+        public ConfigsModel GameConfigs { get; set; }
 
         public GameModel(string name, string picturePath, string configPath, string description)
         {

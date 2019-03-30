@@ -11,45 +11,47 @@ namespace ExMachinaConversionLauncher.Services
         private Dictionary<string, string> _gameParams;
         private Dictionary<string, int> _uiSchema2HdParams;
         private readonly string _pathToMainDirectory;
+        private readonly ToolsService _toolsService;
         private readonly ErrorHandler _errorHandler;
 
-        internal SettingsService(string pathToMainDirectory)
+        public SettingsService(string pathToMainDirectory)
         {
             _pathToMainDirectory = pathToMainDirectory;
             _launcherParams = new Dictionary<string, string>();
             _gameParams = new Dictionary<string, string>();
             _uiSchema2HdParams = new Dictionary<string, int>();
             _errorHandler = new ErrorHandler();
+            _toolsService = new ToolsService(_errorHandler);
         }
 
-        internal void AddParamsToLauncherParams(Dictionary<string, string> newParams)
+        public void AddParamsToLauncherParams(Dictionary<string, string> newParams)
         {
-            _launcherParams = ToolsService.ConcatTwoDictionariesWithoutDuplicates(_launcherParams, newParams);
+            _launcherParams = _toolsService.ConcatTwoDictionariesWithoutDuplicates(_launcherParams, newParams);
         }
 
-        internal void AddParamsToGameParams(Dictionary<string, string> newParams)
+        public void AddParamsToGameParams(Dictionary<string, string> newParams)
         {
-            _gameParams = ToolsService.ConcatTwoDictionariesWithoutDuplicates(_gameParams, newParams);
+            _gameParams = _toolsService.ConcatTwoDictionariesWithoutDuplicates(_gameParams, newParams);
         }
 
-        internal void AddParamsToUiSchema2Hd(Dictionary<string, int> newParams)
+        public void AddParamsToUiSchema2Hd(Dictionary<string, int> newParams)
         {
-            _uiSchema2HdParams = ToolsService.ConcatTwoDictionariesWithoutDuplicates(_uiSchema2HdParams, newParams);
+            _uiSchema2HdParams = _toolsService.ConcatTwoDictionariesWithoutDuplicates(_uiSchema2HdParams, newParams);
         }
 
-        internal void SaveLauncherParams()
+        public void SaveLauncherParams()
         {
             UpdateConfig(_launcherParams, GetNodeXPathForLauncherParams, GetAttributeNameAsConst,
                 "LauncherConfig\\Launcher.config", "Launcher.config", "utf-8");
         }
 
-        internal void SaveGameParams()
+        public void SaveGameParams()
         {
             UpdateConfig(_gameParams, GetNodeXPathForGameParams, GetAttributeByName, "data\\config.cfg",
                 "config.cfg", "windows-1251");
         }
 
-        internal void SaveUiSchema2HdParams()
+        public void SaveUiSchema2HdParams()
         {
             UpdateConfig(_uiSchema2HdParams, GetNodeXPathForUiSchema2HdParams, GetAttributeByName, @"data\if\frames\uischema2_hd.xml",
                 "config.cfg", "windows-1251");
@@ -79,8 +81,6 @@ namespace ExMachinaConversionLauncher.Services
         {
             return paramName;
         }
-
-
 
         private void UpdateConfig<TValue>(Dictionary<string, TValue> keyValuePairs, Func<string, string> getNodeXPath,
             Func<string, string> getAttributeName, string filePath, string fileName, string encoding)

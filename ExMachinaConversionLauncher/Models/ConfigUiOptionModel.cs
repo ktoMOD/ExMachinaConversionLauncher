@@ -4,8 +4,8 @@ namespace ExMachinaConversionLauncher.Models
 {
     public class ConfigUiOptionModel
     {
-        internal string Name { get; set; }
-        internal Dictionary<string, string> UiParameters { get; set; }
+        public string Name { get; set; }
+        public Dictionary<string, string> UiParameters { get; set; }
 
         public ConfigUiOptionModel(string name, Dictionary<string, string> uiParameters)
         {

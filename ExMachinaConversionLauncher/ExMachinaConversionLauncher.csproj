@@ -64,9 +64,9 @@
     <Compile Include="Models\ConfigUiOptionModel.cs" />
     <Compile Include="Models\GameModel.cs" />
     <Compile Include="Models\ResolutionModel.cs" />
-    <Compile Include="Services\AdvancedGraphicSettingsService.cs" />
+    <Compile Include="Services\AdvancedGraphicConfigReader.cs" />
     <Compile Include="Services\ErrorHandler.cs" />
-    <Compile Include="Services\GameSettingsService.cs" />
+    <Compile Include="Services\UserSettingsService.cs" />
     <Compile Include="Services\GameConfigsReader.cs" />
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Services\ToolsService.cs" />
@@ -99,7 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Services\LauncherConfigReader.cs" />
-    <Compile Include="Services\WriteConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

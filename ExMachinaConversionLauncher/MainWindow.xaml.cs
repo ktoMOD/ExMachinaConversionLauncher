@@ -17,11 +17,14 @@ namespace ExMachinaConversionLauncher
         private readonly LauncherConfigReader _launcherConfigReader;
         private readonly string _pathToMainDirectory = ((App)Application.Current).PathToMainDirectory;
         private readonly SettingsService _settingsService = ((App)Application.Current).SettingsService;
+        private readonly ToolsService _toolsService;
         private readonly ErrorHandler _errorHandler;
 
         public MainWindow()
         {
             _errorHandler = new ErrorHandler();
+            _toolsService = new ToolsService(_errorHandler);
+
             try
             {
                 InitializeComponent();
@@ -73,13 +76,12 @@ namespace ExMachinaConversionLauncher
             try
             {
                 _launcherConfigReader.RefreshOtherParamsFromConfig();
-                var writeConfig = new WriteConfig(_errorHandler);
 
                 var selectedGameName = ListOfMods.SelectedValue != null ? ListOfMods.SelectedValue.ToString() : _launcherConfigReader.LastLaunchGame;
                 var selectedGame = _launcherConfigReader.Games.FirstOrDefault(x => x.Name == selectedGameName);
 
                 //Fill part start
-                var uiSchema2HdParams = writeConfig.GetUiSchema2HdParams(this, _launcherConfigReader.FontScaleParamsForHd);
+                var uiSchema2HdParams = _toolsService.PrepareUiSchema2HdParams(this, _launcherConfigReader.FontScaleParamsForHd);
                 _settingsService.AddParamsToUiSchema2Hd(uiSchema2HdParams);
 
                 var launcherParams = new Dictionary<string, string>
@@ -90,7 +92,7 @@ namespace ExMachinaConversionLauncher
                 _settingsService.AddParamsToLauncherParams(launcherParams);
 
                 var hdMode = _launcherConfigReader.LastLaunchHdMode;
-                var mergedParameters = writeConfig.WriteConfigBySelectionGame(selectedGame, hdMode);
+                var mergedParameters = _toolsService.SelectAndPrepareGameParams(selectedGame, hdMode);
                 _settingsService.AddParamsToGameParams(mergedParameters);
 
                 var fullScreenParams = new Dictionary<string, string> { { "r_fullScreen", _launcherConfigReader.FullScreen } };

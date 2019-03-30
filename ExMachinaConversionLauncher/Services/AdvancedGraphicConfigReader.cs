@@ -6,12 +6,12 @@ using System.Xml;
 
 namespace ExMachinaConversionLauncher.Services
 {
-    internal class AdvancedGraphicSettingsService
+    public class AdvancedGraphicConfigReader
     {
         private readonly ErrorHandler _errorHandler;
         private readonly string _uri;
 
-        public AdvancedGraphicSettingsService(string uri, ErrorHandler errorHandler)
+        public AdvancedGraphicConfigReader(string uri, ErrorHandler errorHandler)
         {
             _errorHandler = errorHandler;
             _uri = uri;

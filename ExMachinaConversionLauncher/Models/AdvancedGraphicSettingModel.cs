@@ -1,6 +1,6 @@
 ﻿namespace ExMachinaConversionLauncher.Models
 {
-    internal class AdvancedGraphicSettingModel
+    public class AdvancedGraphicSettingModel
     {
         public readonly string Name;
         public readonly string AdvancedValue;

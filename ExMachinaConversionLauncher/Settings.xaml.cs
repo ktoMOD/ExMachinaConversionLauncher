@@ -13,26 +13,28 @@ namespace ExMachinaConversionLauncher
     public partial class Settings : Window
     {
         private readonly LauncherConfigReader _launcherConfigReader;
-        private readonly GameSettingsService _gameSettings;
-        private readonly AdvancedGraphicSettingsService _advancedGraphicSettingsService;
+        private readonly UserSettingsService _userSettingsService;
+        private readonly AdvancedGraphicConfigReader _advancedGraphicSettingsService;
         private readonly List<AdvancedGraphicSettingModel> _advancedGraphicSettingsModels;
         private readonly string _pathToMainDirectory = ((App)Application.Current).PathToMainDirectory;
         private readonly SettingsService _settingsService = ((App)Application.Current).SettingsService;
+        private readonly ToolsService _toolsService;
         private readonly ErrorHandler _errorHandler;
 
         public Settings(ErrorHandler errorHandler)
         {
             _errorHandler = errorHandler;
+            _toolsService = new ToolsService(_errorHandler);
             try
             {
-                _gameSettings = new GameSettingsService(_errorHandler);
+                _userSettingsService = new UserSettingsService(_errorHandler);
                 _launcherConfigReader = new LauncherConfigReader($@"{_pathToMainDirectory}\LauncherConfig\Launcher.config", _errorHandler);
                 _launcherConfigReader.GetDataFromFile();
                 InitializeComponent();
-                _gameSettings.GetDataFromFile();
+                _userSettingsService.GetDataFromFile();
                 InitializeSettings();
 
-                _advancedGraphicSettingsService = new AdvancedGraphicSettingsService($@"{_pathToMainDirectory}\LauncherConfig\AdvancedGraphicSettings.config", _errorHandler);
+                _advancedGraphicSettingsService = new AdvancedGraphicConfigReader($@"{_pathToMainDirectory}\LauncherConfig\AdvancedGraphicSettings.config", _errorHandler);
                 _advancedGraphicSettingsModels = _advancedGraphicSettingsService.GetDataFromFile();
             }
             catch (Exception ex)
@@ -47,26 +49,26 @@ namespace ExMachinaConversionLauncher
             {
                 #region sliders
 
-                ViewDistanceTextBox.Text = Convert.ToString(_gameSettings.LsViewDistanceDivider, CultureInfo.InvariantCulture);
-                ViewDistanceSlider.Value = _gameSettings.LsViewDistanceDivider;
-                ProjectorsFarDistTextBox.Text = Convert.ToString(_gameSettings.ProjectorsFarDist);
-                ProjectorsFarDistSlider.Value = _gameSettings.ProjectorsFarDist;
-                GrassDrawDistTextBox.Text = Convert.ToString(_gameSettings.GrassDrawDist, CultureInfo.InvariantCulture);
-                GrassDrawDistSlider.Value = _gameSettings.GrassDrawDist;
-                ShadowBlurCoeffTextBox.Text = Convert.ToString(_gameSettings.ShadowBlurCoeff, CultureInfo.InvariantCulture);
-                ShadowBlurCoeffSlider.Value = _gameSettings.ShadowBlurCoeff;
-                GammaGammaTextBox.Text = Convert.ToString(_gameSettings.Gamma, CultureInfo.InvariantCulture);
-                GammaGammaSlider.Value = _gameSettings.Gamma;
-                FovTextBox.Text = Convert.ToString(_gameSettings.Fov, CultureInfo.InvariantCulture);
-                FovSlider.Value = _gameSettings.Fov;
-                CamSpeedTextBox.Text = Convert.ToString(_gameSettings.CamSpeed);
-                CamSpeedSlider.Value = _gameSettings.CamSpeed;
-                MusicVolumeTextBox.Text = Convert.ToString(_gameSettings.Volume);
-                MusicVolumeSlider.Value = _gameSettings.Volume;
-                EffectVolumeTextBox.Text = Convert.ToString(_gameSettings.Volume3D);
-                EffectVolumeSlider.Value = _gameSettings.Volume3D;
-                SpeakVolumeTextBox.Text = Convert.ToString(_gameSettings.Volume2D);
-                SpeakVolumeSlider.Value = _gameSettings.Volume2D;
+                ViewDistanceTextBox.Text = Convert.ToString(_userSettingsService.LsViewDistanceDivider, CultureInfo.InvariantCulture);
+                ViewDistanceSlider.Value = _userSettingsService.LsViewDistanceDivider;
+                ProjectorsFarDistTextBox.Text = Convert.ToString(_userSettingsService.ProjectorsFarDist);
+                ProjectorsFarDistSlider.Value = _userSettingsService.ProjectorsFarDist;
+                GrassDrawDistTextBox.Text = Convert.ToString(_userSettingsService.GrassDrawDist, CultureInfo.InvariantCulture);
+                GrassDrawDistSlider.Value = _userSettingsService.GrassDrawDist;
+                ShadowBlurCoeffTextBox.Text = Convert.ToString(_userSettingsService.ShadowBlurCoeff, CultureInfo.InvariantCulture);
+                ShadowBlurCoeffSlider.Value = _userSettingsService.ShadowBlurCoeff;
+                GammaGammaTextBox.Text = Convert.ToString(_userSettingsService.Gamma, CultureInfo.InvariantCulture);
+                GammaGammaSlider.Value = _userSettingsService.Gamma;
+                FovTextBox.Text = Convert.ToString(_userSettingsService.Fov, CultureInfo.InvariantCulture);
+                FovSlider.Value = _userSettingsService.Fov;
+                CamSpeedTextBox.Text = Convert.ToString(_userSettingsService.CamSpeed);
+                CamSpeedSlider.Value = _userSettingsService.CamSpeed;
+                MusicVolumeTextBox.Text = Convert.ToString(_userSettingsService.Volume);
+                MusicVolumeSlider.Value = _userSettingsService.Volume;
+                EffectVolumeTextBox.Text = Convert.ToString(_userSettingsService.Volume3D);
+                EffectVolumeSlider.Value = _userSettingsService.Volume3D;
+                SpeakVolumeTextBox.Text = Convert.ToString(_userSettingsService.Volume2D);
+                SpeakVolumeSlider.Value = _userSettingsService.Volume2D;
 
                 #endregion
             }
@@ -81,7 +83,7 @@ namespace ExMachinaConversionLauncher
 
                 var resolutionsCollection = _launcherConfigReader.Resolutions;
                 ResolutionComboBox.ItemsSource = resolutionsCollection.Select(x=>$"{x.Width}×{x.Height}");
-                ResolutionComboBox.SelectedItem = _gameSettings.Width + "×" + _gameSettings.Height;
+                ResolutionComboBox.SelectedItem = _userSettingsService.Width + "×" + _userSettingsService.Height;
 
                 #endregion
             }
@@ -140,7 +142,7 @@ namespace ExMachinaConversionLauncher
             };
                 WaterQualityComboBox.ItemsSource = waterQualityCollection;
                 var waterQualityInConfig = String.Empty;
-                switch (_gameSettings.WaterQuality)
+                switch (_userSettingsService.WaterQuality)
                 {
                     case 1:
                         waterQualityInConfig = "Низкое";
@@ -173,9 +175,9 @@ namespace ExMachinaConversionLauncher
             };
                 ShadowsQualityComboBox.ItemsSource = shadowsQualityCollection;
                 var shadowsQualityForSelect = String.Empty;
-                var shadowsQualityInConfig = Convert.ToString(_gameSettings.DsShadows) + "_" +
-                                                Convert.ToString(_gameSettings.DetShadowTexSz) + "_" +
-                                                Convert.ToString(_gameSettings.LgtShadowTexSz);
+                var shadowsQualityInConfig = Convert.ToString(_userSettingsService.DsShadows) + "_" +
+                                                Convert.ToString(_userSettingsService.DetShadowTexSz) + "_" +
+                                                Convert.ToString(_userSettingsService.LgtShadowTexSz);
 
 
                 switch (shadowsQualityInConfig)
@@ -211,7 +213,7 @@ namespace ExMachinaConversionLauncher
             };
                 PostEffectBloomComboBox.ItemsSource = postEffectBloomCollection;
                 var postEffectBloomInConfig = String.Empty;
-                switch (_gameSettings.PostEffectBloom)
+                switch (_userSettingsService.PostEffectBloom)
                 {
                     case 0:
                         postEffectBloomInConfig = "Низкое";
@@ -245,7 +247,7 @@ namespace ExMachinaConversionLauncher
             };
                 SmoothingComboBox.ItemsSource = smoothingCollection;
                 var smoothingInConfig = String.Empty;
-                switch (_gameSettings.MultiSamplesNum)
+                switch (_userSettingsService.MultiSamplesNum)
                 {
                     case 0:
                         smoothingInConfig = "Отключено";
@@ -281,8 +283,8 @@ namespace ExMachinaConversionLauncher
             };
                 TexturesFilterComboBox.ItemsSource = texturesFilterCollection;
                 var texturesFilterForSelect = String.Empty;
-                var texturesFilterInConfig = Convert.ToString(_gameSettings.TexturesFilter) + "_" +
-                                                Convert.ToString(_gameSettings.ShaderMacro1);
+                var texturesFilterInConfig = Convert.ToString(_userSettingsService.TexturesFilter) + "_" +
+                                                Convert.ToString(_userSettingsService.ShaderMacro1);
 
 
                 switch (texturesFilterInConfig)
@@ -310,9 +312,9 @@ namespace ExMachinaConversionLauncher
             {
                 #region checkBoxes
 
-                AutoPlayVideoCheckBox.IsChecked = _gameSettings.AutoPlayVideo;
-                DoNotLoadMainmenuLevelCheckBox.IsChecked = !_gameSettings.DoNotLoadMainmenuLevel;
-                SwitchCameraAllowCheckBox.IsChecked = _gameSettings.SwitchCameraAllow;
+                AutoPlayVideoCheckBox.IsChecked = _userSettingsService.AutoPlayVideo;
+                DoNotLoadMainmenuLevelCheckBox.IsChecked = !_userSettingsService.DoNotLoadMainmenuLevel;
+                SwitchCameraAllowCheckBox.IsChecked = _userSettingsService.SwitchCameraAllow;
                 AdvancedGraphicSettingsCheckBox.IsChecked = _launcherConfigReader.AdvancedGraphic;
 
                 #endregion
@@ -345,99 +347,97 @@ namespace ExMachinaConversionLauncher
         {
             try
             {
-                var writeConfig = new WriteConfig(_errorHandler);
-
                 var resolution = ResolutionComboBox.SelectedItem.ToString().Split('×');
-                _gameSettings.DesiredHeight = Convert.ToInt32(resolution[1]);
-                _gameSettings.DesiredWidth = Convert.ToInt32(resolution[0]);
-                _gameSettings.Height = Convert.ToInt32(resolution[1]);
-                _gameSettings.Width = Convert.ToInt32(resolution[0]);
-                _gameSettings.LsViewDistanceDivider = ViewDistanceSlider.Value;
-                _gameSettings.ProjectorsFarDist = Convert.ToInt32(ProjectorsFarDistSlider.Value);
-                _gameSettings.GrassDrawDist = GrassDrawDistSlider.Value;
+                _userSettingsService.DesiredHeight = Convert.ToInt32(resolution[1]);
+                _userSettingsService.DesiredWidth = Convert.ToInt32(resolution[0]);
+                _userSettingsService.Height = Convert.ToInt32(resolution[1]);
+                _userSettingsService.Width = Convert.ToInt32(resolution[0]);
+                _userSettingsService.LsViewDistanceDivider = ViewDistanceSlider.Value;
+                _userSettingsService.ProjectorsFarDist = Convert.ToInt32(ProjectorsFarDistSlider.Value);
+                _userSettingsService.GrassDrawDist = GrassDrawDistSlider.Value;
                 switch ((string)WaterQualityComboBox.SelectedItem)
                 {
                     case "Низкое":
-                        _gameSettings.WaterQuality = 1;
+                        _userSettingsService.WaterQuality = 1;
                         break;
                     case "Среднее":
-                        _gameSettings.WaterQuality = 2;
+                        _userSettingsService.WaterQuality = 2;
                         break;
                     case "Высокое":
-                        _gameSettings.WaterQuality = 3;
+                        _userSettingsService.WaterQuality = 3;
                         break;
                 }
                 switch ((string)ShadowsQualityComboBox.SelectedItem)
                 {
                     case "Низкое":
-                        _gameSettings.DsShadows = false;
-                        _gameSettings.DetShadowTexSz = 512;
-                        _gameSettings.LgtShadowTexSz = 256;
+                        _userSettingsService.DsShadows = false;
+                        _userSettingsService.DetShadowTexSz = 512;
+                        _userSettingsService.LgtShadowTexSz = 256;
                         break;
                     case "Среднее":
-                        _gameSettings.DsShadows = true;
-                        _gameSettings.DetShadowTexSz = 512;
-                        _gameSettings.LgtShadowTexSz = 256;
+                        _userSettingsService.DsShadows = true;
+                        _userSettingsService.DetShadowTexSz = 512;
+                        _userSettingsService.LgtShadowTexSz = 256;
                         break;
                     case "Высокое":
-                        _gameSettings.DsShadows = true;
-                        _gameSettings.DetShadowTexSz = 1024;
-                        _gameSettings.LgtShadowTexSz = 512;
+                        _userSettingsService.DsShadows = true;
+                        _userSettingsService.DetShadowTexSz = 1024;
+                        _userSettingsService.LgtShadowTexSz = 512;
                         break;
                 }
-                _gameSettings.ShadowBlurCoeff = ShadowBlurCoeffSlider.Value;
+                _userSettingsService.ShadowBlurCoeff = ShadowBlurCoeffSlider.Value;
                 switch ((string)PostEffectBloomComboBox.SelectedItem)
                 {
                     case "Низкое":
-                        _gameSettings.PostEffectBloom = 0;
+                        _userSettingsService.PostEffectBloom = 0;
                         break;
                     case "Среднее":
-                        _gameSettings.PostEffectBloom = 1;
+                        _userSettingsService.PostEffectBloom = 1;
                         break;
                     case "Высокое":
-                        _gameSettings.PostEffectBloom = 2;
+                        _userSettingsService.PostEffectBloom = 2;
                         break;
                 }
                 switch ((string)SmoothingComboBox.SelectedItem)
                 {
                     case "Отключено":
-                        _gameSettings.MultiSamplesNum = 0;
+                        _userSettingsService.MultiSamplesNum = 0;
                         break;
                     case "×2":
-                        _gameSettings.MultiSamplesNum = 2;
+                        _userSettingsService.MultiSamplesNum = 2;
                         break;
                     case "×4":
-                        _gameSettings.MultiSamplesNum = 4;
+                        _userSettingsService.MultiSamplesNum = 4;
                         break;
                     case "×8":
-                        _gameSettings.MultiSamplesNum = 8;
+                        _userSettingsService.MultiSamplesNum = 8;
                         break;
                 }
                 switch ((string)TexturesFilterComboBox.SelectedItem)
                 {
                     case "Билинейная":
-                        _gameSettings.TexturesFilter = 4;
-                        _gameSettings.ShaderMacro1 = "MIP_FILTER Point";
+                        _userSettingsService.TexturesFilter = 4;
+                        _userSettingsService.ShaderMacro1 = "MIP_FILTER Point";
                         break;
                     case "Трилинейная":
-                        _gameSettings.TexturesFilter = 5;
-                        _gameSettings.ShaderMacro1 = "MIP_FILTER Linear";
+                        _userSettingsService.TexturesFilter = 5;
+                        _userSettingsService.ShaderMacro1 = "MIP_FILTER Linear";
                         break;
                     case "Анизотропная":
-                        _gameSettings.TexturesFilter = 3;
-                        _gameSettings.ShaderMacro1 = "MIP_FILTER Linear";
+                        _userSettingsService.TexturesFilter = 3;
+                        _userSettingsService.ShaderMacro1 = "MIP_FILTER Linear";
                         break;
                 }
-                _gameSettings.Gamma = GammaGammaSlider.Value;
-                if (AutoPlayVideoCheckBox.IsChecked != null) _gameSettings.AutoPlayVideo = (bool)AutoPlayVideoCheckBox.IsChecked;
-                if (DoNotLoadMainmenuLevelCheckBox.IsChecked != null) _gameSettings.DoNotLoadMainmenuLevel = (bool)!DoNotLoadMainmenuLevelCheckBox.IsChecked;
-                _gameSettings.Fov = FovSlider.Value;
-                if (SwitchCameraAllowCheckBox.IsChecked != null) _gameSettings.SwitchCameraAllow = (bool)SwitchCameraAllowCheckBox.IsChecked;
+                _userSettingsService.Gamma = GammaGammaSlider.Value;
+                if (AutoPlayVideoCheckBox.IsChecked != null) _userSettingsService.AutoPlayVideo = (bool)AutoPlayVideoCheckBox.IsChecked;
+                if (DoNotLoadMainmenuLevelCheckBox.IsChecked != null) _userSettingsService.DoNotLoadMainmenuLevel = (bool)!DoNotLoadMainmenuLevelCheckBox.IsChecked;
+                _userSettingsService.Fov = FovSlider.Value;
+                if (SwitchCameraAllowCheckBox.IsChecked != null) _userSettingsService.SwitchCameraAllow = (bool)SwitchCameraAllowCheckBox.IsChecked;
                 if (AdvancedGraphicSettingsCheckBox.IsChecked != null) _launcherConfigReader.AdvancedGraphic = (bool)AdvancedGraphicSettingsCheckBox.IsChecked;
-                _gameSettings.CamSpeed = Convert.ToInt32(CamSpeedSlider.Value);
-                _gameSettings.Volume = Convert.ToInt32(MusicVolumeSlider.Value);
-                _gameSettings.Volume3D = Convert.ToInt32(EffectVolumeSlider.Value);
-                _gameSettings.Volume2D = Convert.ToInt32(SpeakVolumeSlider.Value);
+                _userSettingsService.CamSpeed = Convert.ToInt32(CamSpeedSlider.Value);
+                _userSettingsService.Volume = Convert.ToInt32(MusicVolumeSlider.Value);
+                _userSettingsService.Volume3D = Convert.ToInt32(EffectVolumeSlider.Value);
+                _userSettingsService.Volume2D = Convert.ToInt32(SpeakVolumeSlider.Value);
 
 
                 Dictionary<string, string> launcherParams;
@@ -478,9 +478,9 @@ namespace ExMachinaConversionLauncher
                 //Fill part start
                 _settingsService.AddParamsToLauncherParams(launcherParams);
 
-                var settingsParameters = _gameSettings.PrepareSettingsParameters();
+                var settingsParameters = _toolsService.PrepareSettingsParameters(_userSettingsService);
                 var advancedGraphicSettings = _advancedGraphicSettingsService.ConvertAdvancedGraphicSettingsListToDictionary(_advancedGraphicSettingsModels, AdvancedGraphicSettingsCheckBox.IsChecked.GetValueOrDefault());
-                var mergedSettings = ToolsService.ConcatTwoDictionariesWithoutDuplicates(advancedGraphicSettings, settingsParameters);
+                var mergedSettings = _toolsService.ConcatTwoDictionariesWithoutDuplicates(advancedGraphicSettings, settingsParameters);
                 _settingsService.AddParamsToGameParams(mergedSettings);
                 //Fill part end
 

@@ -1,9 +1,9 @@
 ﻿namespace ExMachinaConversionLauncher.Models
 {
-    internal class ResolutionModel
+    public class ResolutionModel
     {
-        internal readonly int Width;
-        internal readonly int Height;
+        public readonly int Width;
+        public readonly int Height;
 
         public ResolutionModel(int width, int height)
         {

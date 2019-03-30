@@ -11,21 +11,22 @@ namespace ExMachinaConversionLauncher.Services
 {
     public class LauncherConfigReader
     {
-        internal string Version { get; set; }
-        internal string FullScreen { get; set; }
-        internal string Uri { get; set; }
-        internal List<GameModel> Games { get; } = new List<GameModel>();
-        internal List<ResolutionModel> Resolutions { get; } = new List<ResolutionModel>();
-        internal List<FontScaleParamForHdModel> FontScaleParamsForHd { get; } = new List<FontScaleParamForHdModel>();
-        internal bool Console { get; set; }
-        internal bool AdvancedGraphic { get; set; }
-        internal string ExeName { get; set; }
-        internal string LastLaunchGame { get; set; }
-        internal string LastLaunchMode { get; set; }
-        internal string LastLaunchHdMode { get; set; }
+        public string Version { get; set; }
+        public string FullScreen { get; set; }
+        public string Uri { get; set; }
+        public List<GameModel> Games { get; } = new List<GameModel>();
+        public List<ResolutionModel> Resolutions { get; } = new List<ResolutionModel>();
+        public List<FontScaleParamForHdModel> FontScaleParamsForHd { get; } = new List<FontScaleParamForHdModel>();
+        public bool Console { get; set; }
+        public bool AdvancedGraphic { get; set; }
+        public string ExeName { get; set; }
+        public string LastLaunchGame { get; set; }
+        public string LastLaunchMode { get; set; }
+        public string LastLaunchHdMode { get; set; }
         private List<string> GeneralParameterNames { get; } = new List<string>();
         private List<string> UiParameterNames { get; } = new List<string>();
         private readonly string _pathToMainDirectory = ((App)Application.Current).PathToMainDirectory;
+        private readonly ToolsService _toolsService;
         private readonly ErrorHandler _errorHandler;
 
 
@@ -33,6 +34,7 @@ namespace ExMachinaConversionLauncher.Services
         {
             _errorHandler = errorHandler;
             Uri = uri;
+            _toolsService = new ToolsService(_errorHandler);
         }
 
         public void GetGamesFromConfig(XmlDocument xDoc)
@@ -176,10 +178,10 @@ namespace ExMachinaConversionLauncher.Services
                             LastLaunchHdMode = value.Value;
                             break;
                         case "console":
-                            Console = ToolsService.BooleanValue(value.Value);
+                            Console = _toolsService.BooleanValue(value.Value);
                             break;
                         case "advancedGraphic":
-                            AdvancedGraphic = ToolsService.BooleanValue(value.Value);
+                            AdvancedGraphic = _toolsService.BooleanValue(value.Value);
                             break;
                     }
                 }
