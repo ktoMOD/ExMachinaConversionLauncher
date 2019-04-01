@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Xml;
@@ -67,31 +68,31 @@ namespace ExMachinaConversionLauncher.Services
 
                     if (xmlAttributeCollection == null) return;
 
-                    LsViewDistanceDivider = Convert.ToDouble(xmlAttributeCollection["lsViewDistanceDivider"].Value);
-                    MultiSamplesNum = Convert.ToInt32(xmlAttributeCollection["r_multiSamplesNum"].Value);
-                    PostEffectBloom = Convert.ToInt32(xmlAttributeCollection["g_postEffectBloom"].Value);
-                    TexturesFilter = Convert.ToInt32(xmlAttributeCollection["g_texturesFilter"].Value);
+                    LsViewDistanceDivider = Convert.ToDouble(xmlAttributeCollection["lsViewDistanceDivider"].Value, CultureInfo.InvariantCulture);
+                    MultiSamplesNum = Convert.ToInt32(xmlAttributeCollection["r_multiSamplesNum"].Value, CultureInfo.InvariantCulture);
+                    PostEffectBloom = Convert.ToInt32(xmlAttributeCollection["g_postEffectBloom"].Value, CultureInfo.InvariantCulture);
+                    TexturesFilter = Convert.ToInt32(xmlAttributeCollection["g_texturesFilter"].Value, CultureInfo.InvariantCulture);
                     ShaderMacro1 = xmlAttributeCollection["shaderMacro1"].Value;
-                    DsShadows = Convert.ToBoolean(xmlAttributeCollection["dsShadows"].Value);
-                    DetShadowTexSz = Convert.ToInt32(xmlAttributeCollection["detShadowTexSz"].Value);
-                    ShadowBlurCoeff = Convert.ToDouble(xmlAttributeCollection["g_shadowBlurCoeff"].Value);
-                    LgtShadowTexSz = Convert.ToInt32(xmlAttributeCollection["lgtShadowTexSz"].Value);
-                    GrassDrawDist = Convert.ToDouble(xmlAttributeCollection["g_grassDrawDist"].Value);
-                    WaterQuality = Convert.ToInt32(xmlAttributeCollection["r_waterQuality"].Value);
-                    Gamma = Convert.ToDouble(xmlAttributeCollection["gammaGamma"].Value);
-                    DesiredHeight = Convert.ToInt32(xmlAttributeCollection["r_desiredHeight"].Value);
-                    DesiredWidth = Convert.ToInt32(xmlAttributeCollection["r_desiredWidth"].Value);
-                    Height = Convert.ToInt32(xmlAttributeCollection["r_height"].Value);
-                    Width = Convert.ToInt32(xmlAttributeCollection["r_width"].Value);
-                    Volume = Convert.ToInt32(xmlAttributeCollection["mus_Volume"].Value);
-                    Volume2D = Convert.ToInt32(xmlAttributeCollection["snd_2dVolume"].Value);
-                    Volume3D = Convert.ToInt32(xmlAttributeCollection["snd_3dVolume"].Value);
-                    Fov = Convert.ToDouble(xmlAttributeCollection["fov"].Value);
-                    AutoPlayVideo = Convert.ToBoolean(xmlAttributeCollection["autoPlayVideo"].Value);
-                    DoNotLoadMainmenuLevel = Convert.ToBoolean(xmlAttributeCollection["DoNotLoadMainmenuLevel"].Value);
-                    CamSpeed = Convert.ToInt32(xmlAttributeCollection["camSpeed"].Value);
-                    ProjectorsFarDist = Convert.ToInt32(xmlAttributeCollection["g_projectorsFarDist"].Value);
-                    SwitchCameraAllow = Convert.ToBoolean(xmlAttributeCollection["g_switchCameraAllow"].Value);
+                    DsShadows = Convert.ToBoolean(xmlAttributeCollection["dsShadows"].Value, CultureInfo.InvariantCulture);
+                    DetShadowTexSz = Convert.ToInt32(xmlAttributeCollection["detShadowTexSz"].Value, CultureInfo.InvariantCulture);
+                    ShadowBlurCoeff = Convert.ToDouble(xmlAttributeCollection["g_shadowBlurCoeff"].Value, CultureInfo.InvariantCulture);
+                    LgtShadowTexSz = Convert.ToInt32(xmlAttributeCollection["lgtShadowTexSz"].Value, CultureInfo.InvariantCulture);
+                    GrassDrawDist = Convert.ToDouble(xmlAttributeCollection["g_grassDrawDist"].Value, CultureInfo.InvariantCulture);
+                    WaterQuality = Convert.ToInt32(xmlAttributeCollection["r_waterQuality"].Value, CultureInfo.InvariantCulture);
+                    Gamma = Convert.ToDouble(xmlAttributeCollection["gammaGamma"].Value, CultureInfo.InvariantCulture);
+                    DesiredHeight = Convert.ToInt32(xmlAttributeCollection["r_desiredHeight"].Value, CultureInfo.InvariantCulture);
+                    DesiredWidth = Convert.ToInt32(xmlAttributeCollection["r_desiredWidth"].Value, CultureInfo.InvariantCulture);
+                    Height = Convert.ToInt32(xmlAttributeCollection["r_height"].Value, CultureInfo.InvariantCulture);
+                    Width = Convert.ToInt32(xmlAttributeCollection["r_width"].Value, CultureInfo.InvariantCulture);
+                    Volume = Convert.ToInt32(xmlAttributeCollection["mus_Volume"].Value, CultureInfo.InvariantCulture);
+                    Volume2D = Convert.ToInt32(xmlAttributeCollection["snd_2dVolume"].Value, CultureInfo.InvariantCulture);
+                    Volume3D = Convert.ToInt32(xmlAttributeCollection["snd_3dVolume"].Value, CultureInfo.InvariantCulture);
+                    Fov = Convert.ToDouble(xmlAttributeCollection["fov"].Value, CultureInfo.InvariantCulture);
+                    AutoPlayVideo = Convert.ToBoolean(xmlAttributeCollection["autoPlayVideo"].Value, CultureInfo.InvariantCulture);
+                    DoNotLoadMainmenuLevel = Convert.ToBoolean(xmlAttributeCollection["DoNotLoadMainmenuLevel"].Value, CultureInfo.InvariantCulture);
+                    CamSpeed = Convert.ToInt32(xmlAttributeCollection["camSpeed"].Value, CultureInfo.InvariantCulture);
+                    ProjectorsFarDist = Convert.ToInt32(xmlAttributeCollection["g_projectorsFarDist"].Value, CultureInfo.InvariantCulture);
+                    SwitchCameraAllow = Convert.ToBoolean(xmlAttributeCollection["g_switchCameraAllow"].Value, CultureInfo.InvariantCulture);
                 }
             }
             catch (Exception ex)

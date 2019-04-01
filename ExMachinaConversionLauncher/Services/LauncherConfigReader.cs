@@ -89,7 +89,7 @@ namespace ExMachinaConversionLauncher.Services
                     var height = xmlAttributeCollection["Height"];
                     if (width != null && !string.IsNullOrEmpty(width.Value) && height != null && !string.IsNullOrEmpty(height.Value))
                     {
-                        Resolutions.Add(new ResolutionModel(Convert.ToInt32(width.Value), Convert.ToInt32(height.Value)));
+                        Resolutions.Add(new ResolutionModel(Convert.ToInt32(width.Value, CultureInfo.InvariantCulture), Convert.ToInt32(height.Value, CultureInfo.InvariantCulture)));
                     }
                 }
             }
@@ -123,9 +123,9 @@ namespace ExMachinaConversionLauncher.Services
                         micAndTooltipFontSize != null && !string.IsNullOrEmpty(micAndTooltipFontSize.Value))
                     {
                         FontScaleParamsForHd.Add(new FontScaleParamForHdModel(
-                            double.Parse(scaleFactor.Value, CultureInfo.InvariantCulture),
-                            int.Parse(wndFontSize.Value, CultureInfo.InvariantCulture),
-                            int.Parse(micAndTooltipFontSize.Value, CultureInfo.InvariantCulture)));
+                            Convert.ToDouble(scaleFactor.Value, CultureInfo.InvariantCulture),
+                            Convert.ToInt32(wndFontSize.Value, CultureInfo.InvariantCulture),
+                            Convert.ToInt32(micAndTooltipFontSize.Value, CultureInfo.InvariantCulture)));
                     }
                 }
             }

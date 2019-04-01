@@ -51,7 +51,7 @@ namespace ExMachinaConversionLauncher
 
                 ViewDistanceTextBox.Text = Convert.ToString(_userSettingsService.LsViewDistanceDivider, CultureInfo.InvariantCulture);
                 ViewDistanceSlider.Value = _userSettingsService.LsViewDistanceDivider;
-                ProjectorsFarDistTextBox.Text = Convert.ToString(_userSettingsService.ProjectorsFarDist);
+                ProjectorsFarDistTextBox.Text = Convert.ToString(_userSettingsService.ProjectorsFarDist, CultureInfo.InvariantCulture);
                 ProjectorsFarDistSlider.Value = _userSettingsService.ProjectorsFarDist;
                 GrassDrawDistTextBox.Text = Convert.ToString(_userSettingsService.GrassDrawDist, CultureInfo.InvariantCulture);
                 GrassDrawDistSlider.Value = _userSettingsService.GrassDrawDist;
@@ -61,13 +61,13 @@ namespace ExMachinaConversionLauncher
                 GammaGammaSlider.Value = _userSettingsService.Gamma;
                 FovTextBox.Text = Convert.ToString(_userSettingsService.Fov, CultureInfo.InvariantCulture);
                 FovSlider.Value = _userSettingsService.Fov;
-                CamSpeedTextBox.Text = Convert.ToString(_userSettingsService.CamSpeed);
+                CamSpeedTextBox.Text = Convert.ToString(_userSettingsService.CamSpeed, CultureInfo.InvariantCulture);
                 CamSpeedSlider.Value = _userSettingsService.CamSpeed;
-                MusicVolumeTextBox.Text = Convert.ToString(_userSettingsService.Volume);
+                MusicVolumeTextBox.Text = Convert.ToString(_userSettingsService.Volume, CultureInfo.InvariantCulture);
                 MusicVolumeSlider.Value = _userSettingsService.Volume;
-                EffectVolumeTextBox.Text = Convert.ToString(_userSettingsService.Volume3D);
+                EffectVolumeTextBox.Text = Convert.ToString(_userSettingsService.Volume3D, CultureInfo.InvariantCulture);
                 EffectVolumeSlider.Value = _userSettingsService.Volume3D;
-                SpeakVolumeTextBox.Text = Convert.ToString(_userSettingsService.Volume2D);
+                SpeakVolumeTextBox.Text = Convert.ToString(_userSettingsService.Volume2D, CultureInfo.InvariantCulture);
                 SpeakVolumeSlider.Value = _userSettingsService.Volume2D;
 
                 #endregion
@@ -82,7 +82,7 @@ namespace ExMachinaConversionLauncher
                 #region screenResolution
 
                 var resolutionsCollection = _launcherConfigReader.Resolutions;
-                ResolutionComboBox.ItemsSource = resolutionsCollection.Select(x=>$"{x.Width}×{x.Height}");
+                ResolutionComboBox.ItemsSource = resolutionsCollection.Select(x => $"{x.Width}×{x.Height}");
                 ResolutionComboBox.SelectedItem = _userSettingsService.Width + "×" + _userSettingsService.Height;
 
                 #endregion
@@ -175,9 +175,9 @@ namespace ExMachinaConversionLauncher
             };
                 ShadowsQualityComboBox.ItemsSource = shadowsQualityCollection;
                 var shadowsQualityForSelect = String.Empty;
-                var shadowsQualityInConfig = Convert.ToString(_userSettingsService.DsShadows) + "_" +
-                                                Convert.ToString(_userSettingsService.DetShadowTexSz) + "_" +
-                                                Convert.ToString(_userSettingsService.LgtShadowTexSz);
+                var shadowsQualityInConfig = Convert.ToString(_userSettingsService.DsShadows, CultureInfo.InvariantCulture) + "_" +
+                                                Convert.ToString(_userSettingsService.DetShadowTexSz, CultureInfo.InvariantCulture) + "_" +
+                                                Convert.ToString(_userSettingsService.LgtShadowTexSz, CultureInfo.InvariantCulture);
 
 
                 switch (shadowsQualityInConfig)
@@ -283,8 +283,8 @@ namespace ExMachinaConversionLauncher
             };
                 TexturesFilterComboBox.ItemsSource = texturesFilterCollection;
                 var texturesFilterForSelect = String.Empty;
-                var texturesFilterInConfig = Convert.ToString(_userSettingsService.TexturesFilter) + "_" +
-                                                Convert.ToString(_userSettingsService.ShaderMacro1);
+                var texturesFilterInConfig = Convert.ToString(_userSettingsService.TexturesFilter, CultureInfo.InvariantCulture) + "_" +
+                                                Convert.ToString(_userSettingsService.ShaderMacro1, CultureInfo.InvariantCulture);
 
 
                 switch (texturesFilterInConfig)
@@ -348,12 +348,12 @@ namespace ExMachinaConversionLauncher
             try
             {
                 var resolution = ResolutionComboBox.SelectedItem.ToString().Split('×');
-                _userSettingsService.DesiredHeight = Convert.ToInt32(resolution[1]);
-                _userSettingsService.DesiredWidth = Convert.ToInt32(resolution[0]);
-                _userSettingsService.Height = Convert.ToInt32(resolution[1]);
-                _userSettingsService.Width = Convert.ToInt32(resolution[0]);
+                _userSettingsService.DesiredHeight = Convert.ToInt32(resolution[1], CultureInfo.InvariantCulture);
+                _userSettingsService.DesiredWidth = Convert.ToInt32(resolution[0], CultureInfo.InvariantCulture);
+                _userSettingsService.Height = Convert.ToInt32(resolution[1], CultureInfo.InvariantCulture);
+                _userSettingsService.Width = Convert.ToInt32(resolution[0], CultureInfo.InvariantCulture);
                 _userSettingsService.LsViewDistanceDivider = ViewDistanceSlider.Value;
-                _userSettingsService.ProjectorsFarDist = Convert.ToInt32(ProjectorsFarDistSlider.Value);
+                _userSettingsService.ProjectorsFarDist = Convert.ToInt32(ProjectorsFarDistSlider.Value, CultureInfo.InvariantCulture);
                 _userSettingsService.GrassDrawDist = GrassDrawDistSlider.Value;
                 switch ((string)WaterQualityComboBox.SelectedItem)
                 {
@@ -434,10 +434,10 @@ namespace ExMachinaConversionLauncher
                 _userSettingsService.Fov = FovSlider.Value;
                 if (SwitchCameraAllowCheckBox.IsChecked != null) _userSettingsService.SwitchCameraAllow = (bool)SwitchCameraAllowCheckBox.IsChecked;
                 if (AdvancedGraphicSettingsCheckBox.IsChecked != null) _launcherConfigReader.AdvancedGraphic = (bool)AdvancedGraphicSettingsCheckBox.IsChecked;
-                _userSettingsService.CamSpeed = Convert.ToInt32(CamSpeedSlider.Value);
-                _userSettingsService.Volume = Convert.ToInt32(MusicVolumeSlider.Value);
-                _userSettingsService.Volume3D = Convert.ToInt32(EffectVolumeSlider.Value);
-                _userSettingsService.Volume2D = Convert.ToInt32(SpeakVolumeSlider.Value);
+                _userSettingsService.CamSpeed = Convert.ToInt32(CamSpeedSlider.Value, CultureInfo.InvariantCulture);
+                _userSettingsService.Volume = Convert.ToInt32(MusicVolumeSlider.Value, CultureInfo.InvariantCulture);
+                _userSettingsService.Volume3D = Convert.ToInt32(EffectVolumeSlider.Value, CultureInfo.InvariantCulture);
+                _userSettingsService.Volume2D = Convert.ToInt32(SpeakVolumeSlider.Value, CultureInfo.InvariantCulture);
 
 
                 Dictionary<string, string> launcherParams;
@@ -647,8 +647,8 @@ namespace ExMachinaConversionLauncher
             try
             {
                 var resolution = ResolutionComboBox.SelectedItem.ToString().Split('×');
-                var height = Convert.ToInt32(resolution[1]);
-                var width = Convert.ToInt32(resolution[0]);
+                var height = Convert.ToInt32(resolution[1], CultureInfo.InvariantCulture);
+                var width = Convert.ToInt32(resolution[0], CultureInfo.InvariantCulture);
                 var ratio = (double)width / (double)height;
 
                 if (Math.Abs(ratio - 16.0 / 9.0) < 0.01 || Math.Abs(ratio - 16.0 / 10.0) < 0.01)
